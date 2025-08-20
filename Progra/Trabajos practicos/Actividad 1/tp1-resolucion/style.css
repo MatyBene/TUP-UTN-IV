@@ -1,0 +1,91 @@
+/* Reset básico */
+body, html {
+    margin: 0;
+    padding: 0;
+    background-color: #8cb0f1;
+}
+
+/* Header */
+header {
+    background-color: #537bcc;
+    margin: 0;
+    text-align: right;
+    height: 60px;
+}
+
+/* Menú */
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    display: inline-block;
+    padding: 20px;
+    font-size: 20px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+/* Imagen */
+img {
+    display: block;
+    width: 900px;
+    height: 600px;
+    margin: 20px auto 0 auto;
+}
+
+/* Sección */
+section {
+    margin-top: 20px;
+    margin-bottom: 120px; /* espacio para que el footer no lo tape */
+}
+
+/* Formularios */
+form {
+    background-color: #537bcc50;
+    padding: 20px;
+    text-align: center;
+    width: 250px; /* ancho adaptable */
+    margin: 20px auto;
+    height: auto; /* se adapta al contenido */
+}
+
+label {
+    font-size: 20px;
+    display: block;
+    margin: 10px 0 5px 0;
+}
+
+input {
+    display: block;
+    margin: 5px auto 10px auto;
+}
+
+/* Botón */
+button {
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+/* Footer */
+footer {
+    background-color: #537bcc;
+    height: 105px;
+    text-align: center;
+    padding: 20px;
+    font-size: 20px;
+    margin-top: 300px; /* empuja el footer hacia abajo */
+}
+
+/* Párrafos */
+p {
+    margin: 0;
+    padding: 5px;
+}
+
+

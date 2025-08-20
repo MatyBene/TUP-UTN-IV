@@ -1,0 +1,14 @@
+header {
+    background-color: #202122;
+    margin: 0;
+    height: 60px;
+}
+
+nav{
+    padding-top: 15px;
+    padding-left: 15px;
+}
+
+header button{
+    padding: 5px;
+}
