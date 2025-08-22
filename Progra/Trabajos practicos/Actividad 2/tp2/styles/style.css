@@ -1,0 +1,46 @@
+body {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto 50% auto;
+    grid-template-areas: 
+        "nav nav nav" 
+        "main main aside" 
+        "footer footer footer";
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+/* HEADER */
+
+.header-container {
+    grid-area: nav;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* HEADER */
+
+/* MAIN */
+
+.main-container {
+    grid-area: main;
+}
+
+/* MAIN */
+
+/* ASIDE */
+
+.aside-container {
+    grid-area: aside;
+}
+
+/* ASIDE */
+
+/* FOOTER */
+
+.footer-container {
+    grid-area: footer;
+}
+
+/* FOOTER */
