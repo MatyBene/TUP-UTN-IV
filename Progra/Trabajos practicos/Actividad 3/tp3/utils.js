@@ -1,6 +1,7 @@
 function showProductList(products) {
     console.log("=== LISTA DE PRODUCTOS ===");
     console.log("Total de productos:", products.length);
+    console.log("Cantidad total de productos en stock:", products.reduce((total, product) => total + product.stock, 0));
     console.log("=====================================");
     
     products.forEach(function(product, index) {
