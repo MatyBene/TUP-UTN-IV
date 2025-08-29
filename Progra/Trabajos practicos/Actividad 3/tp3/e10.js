@@ -1,46 +1,44 @@
-const products = require('./products');
-const { showProductList } = require('./utils.js');
+var cart = [];
 
-const shop = {
-    products: products,
+console.log("Carrito vacio:", cart);
 
-    sell(productId, quantity){
+cart.push({
+    product: "Laptop Dell",
+    quantity: 2,
+    unitPrice: 850000
+});
 
-        const product = this.searchProduct(productId);
+cart.push({
+    product: "Gaming Mouse",
+    quantity: 1,
+    unitPrice: 45000
+});
 
-        if(product && product.stock >= quantity){
-            product.stock -= quantity;
-            console.log("Venta realizada");
-        } else if(product) {
-            console.log("Stock insuficiente");
-        }
-    },
+cart.push({
+    product: "Mechanical Keyboard",
+    quantity: 1,
+    unitPrice: 120000
+});
 
-    searchProduct(productId) {
-        const product = this.products.find(product => product.id === productId);
+cart.push({
+    product: "24 Monitor",
+    quantity: 1,
+    unitPrice: 300000
+});
 
-        if(product) {
-            return product;
-        } else {
-            console.log("Producto no encontrado");
-            return;
-        }
-    }
-};
+console.log("Carrito con productos:", cart);
 
-showProductList(shop.products);
+const total = cart.reduce((accumulator, product) => {
+    return accumulator + (product.quantity * product.unitPrice);
+}, 0);
 
-console.log("-" .repeat(6));
+const details = cart.map(product => {
+    const subtotal = product.quantity * product.unitPrice;
+    return `Producto ${product.product} - Cantidad ${product.quantity} - Subtotal $${subtotal}`;
+});
 
-console.log("\n1. Venta exitosa - 2 Laptops Dell:");
-shop.sell(1, 2);
+console.log("\nDetalle de carrito: ");
+details.forEach(product => console.log(product));
+console.log("====================");
+console.log(`Total a pagar: $${total}`);
 
-console.log("\n2. Intento de venta con stock insuficiente - 15 Laptops Dell:");
-shop.sell(1, 15);
-
-console.log("\n3. Intento de venta de producto inexistente - ID 99:");
-shop.sell(99, 1);
-
-console.log("-" .repeat(6));
-
-showProductList(shop.products);

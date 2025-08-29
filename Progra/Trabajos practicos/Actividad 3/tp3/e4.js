@@ -1,11 +1,13 @@
-const products = require('./products.js');
+const products = require('./data/products.js');
 
-const product1 = products.find(product => product.name == "Laptop Dell");
+const totalPrice = products.reduce((mount, product) => mount + product.price, 0);
 
-const product2 = products.find(product => product.name == "La");
+console.log(`Precio total de todos los productos: ${totalPrice}`);
 
-if(product1){
-    console.log(product1.name);
-} else {
-    console.log("Producto no encontrado");
-}
+const avg = function() {
+  return totalPrice / products.length;
+};
+
+console.log(`Precio promedio: ${avg()}`);
+
+

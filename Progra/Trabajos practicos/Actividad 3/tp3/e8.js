@@ -1,24 +1,7 @@
-const clients = require('./clients.js');
+const numbers = require("./data/numbers.js");
 
-function processClients(clients, callback) {
-    callback(clients);
-}
+console.log(numbers);
 
-function showNames(clients) {
-    console.log("=== NOMBRES DE LOS CLIENTES ===");
-    clients.forEach(client => {
-        console.log(client.name);
-    });
-}
+console.log(numbers.sort((a, b) => (a - b)));
 
-function showQuantityPurchases(clientes) {
-    console.log("=== CANTIDAD TOTAL DE COMPRAS POR CLIENTE ===");
-    clients.forEach(client => {
-        console.log(`${client.name}: ${client.purchases.length} compras`);
-    });
-}
-
-processClients(clients, showNames);
-
-processClients(clients, showQuantityPurchases);
-
+console.log(numbers.sort((a, b) => (b - a)));

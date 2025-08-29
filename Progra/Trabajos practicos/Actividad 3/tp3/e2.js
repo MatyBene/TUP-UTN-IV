@@ -1,7 +1,9 @@
-const products = require('./products.js');
+const products = require('./data/products.js');
 const { showProductList } = require('./utils.js');
 
-var productsInStock = products.filter(product => product.stock > 10);
+let productsInStock = products.filter(function(product) {
+    return product.stock > 10
+});
 
 showProductList(productsInStock);
 

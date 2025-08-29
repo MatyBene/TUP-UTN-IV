@@ -1,7 +1,4 @@
-const products = require('./products.js');
+const products = require('./data/products.js');
 
-const totalPrice = products.reduce((mount, product) => {
-  return mount + product.price;
-}, 0);
-
-console.log(totalPrice);
+console.log(products.some(product => product.stock == 0)); // No hay ningun producto con stock igual a cero
+console.log(products.every(product => product.price > 100)); // Todos los productos valen mas de 100

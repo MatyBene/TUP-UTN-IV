@@ -1,44 +1,42 @@
-var cart = [];
+const books = require("./data/books.js");
 
-console.log("Carrito vacio:", cart);
+console.log("Libros");
 
-cart.push({
-    product: "Laptop Dell",
-    quantity: 2,
-    unitPrice: 850000
-});
+console.log(books);
 
-cart.push({
-    product: "Gaming Mouse",
-    quantity: 1,
-    unitPrice: 45000
-});
+console.log("-" .repeat(6));
 
-cart.push({
-    product: "Mechanical Keyboard",
-    quantity: 1,
-    unitPrice: 120000
-});
+const booksByGente = books.filter(book => book.genre === "Novela");
 
-cart.push({
-    product: "24 Monitor",
-    quantity: 1,
-    unitPrice: 300000
-});
+console.log("Libros por genero (Novela)");
 
-console.log("Carrito con productos:", cart);
+console.log(booksByGente);
 
-const total = cart.reduce((accumulator, product) => {
-    return accumulator + (product.quantity * product.unitPrice);
-}, 0);
+console.log("-" .repeat(6));
 
-const details = cart.map(product => {
-    const subtotal = product.quantity * product.unitPrice;
-    return `Producto ${product.product} - Cantidad ${product.quantity} - Subtotal $${subtotal}`;
-});
+const titlesInUppercase = books.map(book => book.title.toUpperCase());
 
-console.log("\nDetalle de carrito: ");
-details.forEach(product => console.log(product));
-console.log("====================");
-console.log(`Total a pagar: $${total}`);
+console.log("Libros con titulos en mayuscula");
 
+console.log(titlesInUppercase);
+
+console.log("-" .repeat(6));
+
+function lendBook(id) {
+    const book = books.find(book => book.id == id);
+
+    if(book && book.available){
+        book.available = false;
+        console.log("Libro prestado con exito");
+        
+    } else {
+        console.log("No disponible");
+        
+    }
+}
+
+console.log("Libro 1 - Disponible");
+lendBook(1);
+
+console.log("Libro 2 - No disponible");
+lendBook(2);

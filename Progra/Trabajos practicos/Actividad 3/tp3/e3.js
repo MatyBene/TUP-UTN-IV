@@ -1,8 +1,17 @@
-const products = require('./products.js');
-const { showProductList } = require('./utils.js');
+const products = require('./data/products.js');
 
-showProductList(products);
+function searchProductByName(productName) {
+    const foundProduct = products.find(function(product) {
+        return product.name === productName;
+    });
+    
+    if (foundProduct) {
+        console.log(`Producto encontrado: ${foundProduct.name} - Precio: $${foundProduct.price} - Stock: ${productoEncontrado.stock}`);
+    } else {
+        console.log("Producto no encontrado");
+    }
+}
 
-var newPrice = products.map(product => ({...product, price: product.price * 1.2}));
-
-showProductList(newPrice);
+searchProductByName("Laptop Dell");
+searchProductByName("Mouse Logitech");
+searchProductByName("Producto Inexistente");

@@ -1,42 +1,47 @@
-const books = require("./books.js");
+const contacts = require("./data/contacts");
 
-console.log("Libros");
+const agenda = {
+    contactos: contacts,
 
-console.log(books);
+    addContact(contact) {
+        this.contacts.push(contact);
+        console.log(`Contacto ${contact.nombre} agregado exitosamente.`);
+    },
 
-console.log("-" .repeat(6));
-
-const booksByGente = books.filter(book => book.genre === "Novela");
-
-console.log("Libros por genero (Novela)");
-
-console.log(booksByGente);
-
-console.log("-" .repeat(6));
-
-const titlesInUppercase = books.map(book => book.title.toUpperCase());
-
-console.log("Libros con titulos en mayuscula");
-
-console.log(titlesInUppercase);
-
-console.log("-" .repeat(6));
-
-function lendBook(id) {
-    const book = books.find(book => book.id == id);
-
-    if(book && book.available){
-        book.available = false;
-        console.log("Libro prestado con exito");
+    deleteContact(id) {
+        const iContacts = this.contacts.length;
+        this.contacts = this.contacts.filter(contact => contact.id !== id);
         
-    } else {
-        console.log("No disponible");
+        if (this.contacts.length < iContacts) {
+            console.log(`Contacto con ID ${id} eliminado exitosamente.`);
+        } else {
+            console.log(`No se encontró contacto con ID ${id}.`);
+        }
+    },
+
+    searchContact(name) {
+        const contact = this.contacts.find(contact => 
+            contact.name.toLowerCase().includes(name.toLowerCase())
+        );
         
+        if (contact) {
+            console.log("Contacto encontrado:", contact);
+            return contact;
+        } else {
+            console.log(`No se encontró contacto con nombre: ${name}`);
+            return null;
+        }
+    },
+
+    showContacts() {
+        console.log("\n=== LISTA DE CONTACTOS ===");
+        if (this.contacts.length === 0) {
+            console.log("No hay contactos en la agenda.");
+        } else {
+            this.contacts.forEach((contact, index) => {
+                console.log(`${index + 1}. ID: ${contact.id} | Nombre: ${contact.name} | Teléfono: ${contact.phone}`);
+            });
+        }
+        console.log("========================\n");
     }
-}
-
-console.log("Libro 1 - Disponible");
-lendBook(1);
-
-console.log("Libro 2 - No disponible");
-lendBook(2);
+};

@@ -1,9 +1,8 @@
-const products = require('./products.js');
+const products = require('./data/products.js');
 const { showProductList } = require('./utils.js');
 
 showProductList(products);
 
-// Agregar un nuevo producto usando push()
 var newProduct = {
     id: 8,
     name: "Webcam HD",
@@ -11,6 +10,7 @@ var newProduct = {
     stock: 20
 };
 
+// Agregar un nuevo producto usando push()
 products.push(newProduct);
 console.log("\n=== AGREGA PRODUCTO ===");
 console.log("Producto agregado:", newProduct);

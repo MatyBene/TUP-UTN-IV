@@ -1,7 +1,24 @@
-const clients = require('./clients.js');
+const clients = require('./data/clients.js');
 
-console.log("Cantidad de compras por cliente: \n");
+function processClients(clients, callback) {
+    callback(clients);
+}
 
-clients.forEach(function(client, index) {
-    console.log(`Nombre: ${client.name} | Cantidad: ${client.purchases.length}`);
-});
+function showNames(clients) {
+    console.log("=== NOMBRES DE LOS CLIENTES ===");
+    clients.forEach(client => {
+        console.log(client.name);
+    });
+}
+
+function showQuantityPurchases(clientes) {
+    console.log("=== CANTIDAD TOTAL DE COMPRAS POR CLIENTE ===");
+    clients.forEach(client => {
+        console.log(`${client.name}: ${client.purchases.length} compras`);
+    });
+}
+
+processClients(clients, showNames);
+
+processClients(clients, showQuantityPurchases);
+

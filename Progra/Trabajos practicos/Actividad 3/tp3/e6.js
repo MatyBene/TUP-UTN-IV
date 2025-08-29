@@ -1,4 +1,5 @@
-const products = require('./products.js');
+const clients = require('./data/clients.js');
 
-console.log(products.some(product => product.stock == 0)); // No hay ningun producto con stock igual a cero
-console.log(products.every(product => product.price > 100)); // Todos los productos valen mas de 100
+console.log("Cantidad de compras por cliente: \n");
+
+clients.forEach((client) => console.log(`Nombre: ${client.name} | Cantidad: ${client.purchases.length}`));

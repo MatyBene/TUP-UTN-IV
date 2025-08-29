@@ -1,0 +1,66 @@
+
+/* Parte 1 - FlexBox */
+.caja{
+  width: 100px;
+  height: 100px;
+  background: #aaa;
+  margin: 5px;
+}
+
+.contenedorFlex{
+  display: flex;
+  border: 2px solid black;
+  flex-direction: row; /*Acomoda en fila o columna*/
+  flex-wrap: wrap; /*Permite saltos de linea*/
+  justify-content: center; /*Mueve los elementos*/
+  align-items: center; /*Mueve texto*/
+}
+
+/* Parte 2 - Grid */
+.miCaja{
+  background-color: #aaa;
+  margin: 5px;
+  text-align: center;
+  line-height: 100px;
+}
+
+.contenedorGrid{
+  display: grid;
+  grid-template-areas: 'nav nav nav' /*Engloben todo en una sola comilla, no sean como yo XD*/
+                        'main main aside'
+                        'footer footer footer';
+  grid-template-rows: 20% auto 20%;
+}
+
+.c1{
+  grid-area: nav;
+  background-color: lightblue;
+}
+
+.c2{
+  grid-area: main;
+  background-color: lightpink;
+}
+
+.c3{
+  grid-area: aside;
+  background-color: lightgreen;
+}
+
+.c4{
+  grid-area: footer;
+  background-color: lightgoldenrodyellow;
+}
+
+
+ /* @media (max-width: 768px) {
+  .contenedorGrid {
+    grid-template-areas:
+      "nav"
+      "main"
+      "aside"
+      "footer";
+    grid-template-columns: 100%;
+    grid-template-rows: auto;
+  } 
+} */

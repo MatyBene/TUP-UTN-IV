@@ -1,0 +1,97 @@
+body{
+    display: grid;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-size: 130%;
+
+    grid-template-areas: 'nav nav nav'
+                            'main main aside'
+                            'footer footer footer';
+    grid-template-columns: auto auto 20%;
+    grid-template-rows: 13% 1fr 15%;
+    
+}
+
+header{
+    grid-area: nav;
+    background-color: lightblue;
+}
+
+nav{
+    display: flex;
+    justify-content: flex-end;
+}
+
+a{
+    padding: 3%;
+    text-decoration: none;
+    color: black;
+}
+
+main{
+    grid-area: main;
+    background-color: lightcoral;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.caja{
+    width: 20%;
+    height: 100px;
+    border: 1px solid black;
+    text-align: center;
+    line-height: 100px;
+    margin: 3%;
+}
+
+.caja:hover{
+    background-color: #aaa;
+    font-size:150%;
+}
+
+aside{
+    grid-area: aside;
+    background-color: lightgreen;
+}
+
+.resenia{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 10%;
+}
+
+#texto-resenia{
+    font-size: 120%;
+    font-weight: 900;
+    margin-top: 15%;
+}
+
+.item-resenia{
+    padding: 10%;
+}
+
+footer{
+    grid-area: footer;
+    background-color: lightgoldenrodyellow;
+    text-align: center;
+}
+
+p{
+    margin: 0;
+    padding: 1%;
+}
+
+@media (max-width:500px) {
+    body{
+        grid-template-areas: 'nav '
+                            'main '
+                            'aside'
+                            'footer ';
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+}
