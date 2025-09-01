@@ -1,0 +1,336 @@
+/* =========================
+   Variables (Paleta vino)
+   ========================= */
+:root{
+  --vino-900:#3a0d17;
+  --vino-800:#4c1520;
+  --vino-700:#5a1926;
+  --vino-600:#6c1e2e;
+  --vino-500:#7a2436;
+  --vino-400:#a0465a;     
+  --vino-300:#c36a7d;
+  --vino-200:#e2a9b4;     /* suavizado */
+  --crema-50:#fff8f6;     /* fondo claro */
+  --tinta:#1f0e12;        /* texto principal */
+  --negro:#000;
+  --blanco:#fff;
+  --borde:#e9d6db;
+}
+
+/* Reset muy suave */
+*{ 
+    box-sizing:border-box; 
+}
+
+
+html,body{
+     margin:0; padding:0; 
+}
+
+
+body{
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  color:var(--tinta);
+  background:var(--crema-50);
+}
+
+
+header{
+  background: var(--vino-600);
+  color:var(--blanco);
+  border-bottom:4px solid var(--vino-400);
+  padding:12px 16px;
+  height: 70px;
+}
+
+.logo{
+  float:left;
+  margin:0;
+  font-size:1.6rem;
+  letter-spacing:.5px;
+  position:relative;
+  padding-left:44px; /* espacio para el pseudoicono */
+}
+
+/* Pseudoelemento del logo */
+.logo::before{
+  content:"🍷";
+  position:absolute;
+  left:0; top:50%;
+  font-size:1.6rem;
+  line-height: 5px;
+}
+
+nav{ 
+  float:right; 
+}
+
+.menu{ 
+  list-style:none; 
+  margin:0; 
+  padding:0; 
+}
+
+.menu > li{
+  display:inline-block;
+  margin-left:8px;
+}
+
+.menu a{
+  display:inline-block;
+  text-decoration:none;
+  color: var(--blanco);
+  padding:8px 12px;
+  border:1px solid transparent;
+  border-radius:999px;
+}
+
+/* Pseudoclase :hover en navegación */
+.menu a:hover{
+  background:var(--vino-400);
+  border-color:rgba(255,255,255,.25);
+}
+
+/* Link activo con aria-current */
+.menu a[aria-current="page"] {
+  background: var(--vino-400);
+  color: var(--blanco);
+}
+
+
+/* =========================
+   Main y asides
+   ========================= */
+main{
+  width:90%;
+  max-width:980px;
+  margin:16px auto;
+  position:relative;
+}
+
+.destacado{
+  background:rgba(160, 70, 90, .08); /* vino con transparencia */
+  border:1px solid var(--borde);
+  border-left:6px solid var(--vino-400);
+  padding:12px 14px;
+  border-radius:12px;
+  margin:14px 0;
+}
+
+/* =========================
+   Tablas Menú (selectores avanzados)
+   ========================= */
+table{
+  border-collapse:separate; /* para redondear en reservas */
+  border-spacing:0;
+  width:100%;
+  background:var(--blanco);
+  border:1px solid var(--borde);
+}
+
+.tabla-menu thead th{
+  background:var(--vino-700);
+  color:var(--blanco);
+  padding:10px;
+  text-align:left;
+  position:sticky; /* opcional: fija el header */
+  top:0;
+}
+
+.tabla-menu td, .tabla-menu th{
+  padding:10px 12px;
+  border-bottom:1px solid var(--borde);
+}
+
+/* Fila de categoría */
+.tabla-menu tr.cat th{
+  background:var(--vino-200);
+  color:var(--vino-900);
+  font-size:1.05rem;
+}
+
+/* Selector descendiente: estilos solo dentro de la tabla del menú */
+section .tabla-menu .nombre{
+  font-weight:600;
+}
+
+/* Pseudoelemento: ícono antes del nombre del plato */
+.tabla-menu td.nombre::before{
+  content:"🍽️ ";
+}
+
+/* Selector de atributo: resaltar recomendados */
+.tabla-menu td[data-recomendado="true"]{
+  background:rgba(160,70,90,.10);
+  border-left:4px solid var(--vino-400);
+}
+
+/* Hermano adyacente: precio justo después de la descripción */
+.tabla-menu td.desc + td.precio{
+  color:var(--vino-600);
+  font-weight:700;
+}
+
+/* Hermanos generales: calorías con estilo diferente en la misma fila que sigue al nombre */
+.tabla-menu td.nombre ~ td.cal{
+  opacity:.8;
+  font-style:italic;
+}
+
+
+/* =========================
+   Formulario Reservas
+   ========================= */
+form{
+  background:var(--blanco);
+  border:1px solid var(--borde);
+  padding:16px;
+  border-radius:14px;
+}
+
+fieldset{
+  border:1px dashed var(--vino-200);
+  margin:0 0 12px 0;
+  padding:12px;
+  border-radius:10px;
+}
+
+label{
+  display:block;
+  margin:8px 0 4px;
+}
+
+input, button{
+  font:inherit;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="date"],
+input[type="time"]{
+  width:100%;
+  padding:8px 10px;
+  border:1px solid var(--borde);
+  border-radius:8px;
+  background:#fff;
+}
+
+/* Campos obligatorios resaltados (selector de atributo) */
+input[required]{
+  border-color:var(--vino-200);
+}
+
+/* :focus en inputs */
+input:focus{
+  border-color:var(--vino-400);
+  box-shadow:0 0 0 3px rgba(160,70,90,.20);
+}
+
+/* Botón con estados :hover y :active */
+.btn{
+  display:inline-block;
+  background:var(--vino-600);
+  color:var(--blanco);
+  padding:10px 16px;
+  border:2px solid var(--vino-600);
+  border-radius:999px;
+  text-decoration:none;
+}
+
+.btn:hover{
+  background:var(--vino-500);
+}
+
+
+/* Tabla reservas con bordes redondeados */
+.tabla-reservas{
+  border-radius:12px;
+  overflow:hidden; /* respeta el radio en celdas */
+}
+
+
+.tabla-reservas th{
+  background:var(--vino-700);
+  color:#fff;
+  padding:10px;
+  text-align:left;
+}
+.tabla-reservas td{
+  padding:10px 12px;
+  border-bottom:1px solid var(--borde);
+}
+
+/* =========================
+   Galería (sin flex ni grid)
+   ========================= */
+.galeria{
+  list-style:none;
+  margin:0; padding:0;
+  text-align:center; /* truco para centrar inline-blocks */
+}
+.galeria > li{
+  display:inline-block;       /* mosaico sin grid/flex */
+  width:46%;
+  margin:1.5%;
+  vertical-align:top;
+}
+.galeria figure{
+  margin:0; padding:0;
+  position:relative;
+  border-radius:16px;
+  overflow:hidden;
+  border:1px solid var(--borde);
+  background:#fff;
+}
+.galeria img{
+  display:block;
+  width:100%;
+  height:auto;
+}
+
+/* Pseudoelemento que aparece al hover mostrando etiqueta del data-attribute */
+.galeria figcaption{
+  padding:10px 12px;
+  background:#fff;
+}
+.galeria figcaption::after{
+  content: attr(data-etiqueta);
+  position:absolute;
+  right:8px; top:8px;
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(122,36,54,.85);
+  color:#fff;
+  opacity:0;
+  transition:opacity .2s ease;
+  pointer-events:none;
+}
+
+/* Cambia la opacidad al hacer hover sobre la figura */
+.galeria figure:hover figcaption::after {
+  opacity: 1;
+}
+
+/* =========================
+   Footer + estados de links
+   ========================= */
+footer{
+  margin-top:20%;
+  padding:16px;
+  background:var(--vino-800);
+  color:#f7e9ee;
+  border-top:4px solid var(--vino-400);
+  text-align: center;
+}
+footer a:link{ color:#ffe4eb; }
+footer a:visited{ color:#ffd0db; }
+footer a:hover{ color:#ffffff; text-decoration:underline; }
+footer a:active{ color:#ffb8c8; }
+
+#formReserva .btn{
+  background:var(--vino-700);
+  border-color:var(--vino-700);
+}
+

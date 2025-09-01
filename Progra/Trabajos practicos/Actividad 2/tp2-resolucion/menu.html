@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Sabores del Mundo — Menú</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Menú del restaurante: entradas, platos principales, postres y bebidas.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1 class="logo">Sabores del Mundo</h1>
+    <nav aria-label="Navegación principal">
+      <ul class="menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="menu.html" aria-current="page">Menú</a></li>
+        <li><a href="reservas.html">Reservas y Contacto</a></li>
+        <li><a href="galeria.html">Galería</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section aria-labelledby="carta">
+      <h2 id="carta">Nuestra carta</h2>
+
+      <table class="tabla-menu" aria-describedby="nota-menu">
+        <caption id="nota-menu">Platos disponibles por categoría</caption>
+
+        <!-- Encabezado de columnas -->
+        <thead>
+          <tr>
+            <th scope="col">Plato</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Calorías</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <!-- Encabezado de categoría dentro del cuerpo  -->
+           <tr class="cat">
+            <th scope="rowgroup" colspan="4">Entradas</th>
+          </tr>
+          <tr>
+            <td class="nombre" data-recomendado="false">Bruschettas</td>
+            <td class="desc">Tomate, albahaca y aceite de oliva</td>
+            <td class="precio">$4.500</td>
+            <td class="cal">220 kcal</td>
+          </tr>
+          <tr>
+            <td class="nombre" data-recomendado="true">Empanadas criollas</td>
+            <td class="desc">Carne suave, cebolla y especias</td>
+            <td class="precio">$3.800</td>
+            <td class="cal">260 kcal</td>
+          </tr>
+          <tr>
+            <td class="nombre">Sopa del día</td>
+            <td class="desc">Verduras de estación</td>
+            <td class="precio">$3.200</td>
+            <td class="cal">180 kcal</td>
+          </tr>
+
+          <tr class="cat">
+            <th scope="rowgroup" colspan="4">Platos principales</th>
+          </tr>
+          <tr>
+            <td class="nombre">Ravioles caseros</td>
+            <td class="desc">De ricota y espinaca con salsa fileto</td>
+            <td class="precio">$7.900</td>
+            <td class="cal">640 kcal</td>
+          </tr>
+          <tr>
+            <td class="nombre" data-recomendado="true">Curry de pollo</td>
+            <td class="desc">Leche de coco, jengibre y basmati</td>
+            <td class="precio">$8.400</td>
+            <td class="cal">710 kcal</td>
+          </tr>
+          <tr>
+            <td class="nombre">Risotto de hongos</td>
+            <td class="desc">Arborio, hongos y parmesano</td>
+            <td class="precio">$8.900</td>
+            <td class="cal">690 kcal</td>
+          </tr>
+
+          <tr class="cat">
+            <th scope="rowgroup" colspan="4">Postres</th>
+          </tr>
+          <tr>
+            <td class="nombre">Tiramisú</td>
+            <td class="desc">Clásico italiano con cacao</td>
+            <td class="precio">$3.900</td>
+            <td class="cal">420 kcal</td>
+          </tr>
+          <tr>
+            <td class="nombre" data-recomendado="true">Flan casero</td>
+            <td class="desc">Con crema y dulce de leche</td>
+            <td class="precio">$3.600</td>
+            <td class="cal">380 kcal</td>
+          </tr>
+          <tr>
+            <td class="nombre">Helado artesanal</td>
+            <td class="desc">2 bochas a elección</td>
+            <td class="precio">$3.500</td>
+            <td class="cal">300 kcal</td>
+          </tr>
+
+          <tr class="cat">
+            <th scope="rowgroup" colspan="4">Bebidas</th>
+          </tr>
+          <!-- Uso de rowspan: mismo nombre con 3 tamaños -->
+          <tr>
+            <td class="nombre" rowspan="3">Limonada</td>
+            <td class="desc">Natural con menta</td>
+            <td class="precio">$2.800 (S)</td>
+            <td class="cal">90 kcal</td>
+          </tr>
+          <tr>
+            <td class="desc">Natural con menta</td>
+            <td class="precio">$3.200 (M)</td>
+            <td class="cal">120 kcal</td>
+          </tr>
+          <tr>
+            <td class="desc">Natural con menta</td>
+            <td class="precio">$3.600 (L)</td>
+            <td class="cal">150 kcal</td>
+          </tr>
+          <!-- Uso de colspan: combo -->
+          <tr>
+            <td class="nombre">Café + mini dulce</td>
+            <td class="desc" colspan="2">Espresso o americano con pastelito</td>
+            <td class="cal">210 kcal</td>
+          </tr>
+          <tr>
+            <td class="nombre">Agua sin gas</td>
+            <td class="desc">Botella 500 ml</td>
+            <td class="precio">$1.900</td>
+            <td class="cal">0 kcal</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <aside class="destacado recomendado" aria-label="Plato recomendado del día">
+      <h3>Plato recomendado</h3>
+      <p><strong>Curry de pollo</strong> — aroma especiado y cremoso.</p>
+    </aside>
+  </main>
+
+  <footer>
+    <address>
+      Av. Sabores 1234, Ciudad. Tel: <a href="tel:+5491100000000">+54 9 11 0000-0000</a>
+    </address>
+    <p>Síguenos:
+      <a href="https://www.instagram.com" target="_blank" rel="noopener">Instagram</a> ·
+      <a href="https://www.facebook.com" target="_blank" rel="noopener">Facebook</a> ·
+      <a href="https://twitter.com" target="_blank" rel="noopener">X/Twitter</a>
+    </p>
+    <small>&copy; <time datetime="2025">2025</time> Sabores del Mundo</small>
+  </footer>
+</body>
+</html>
+

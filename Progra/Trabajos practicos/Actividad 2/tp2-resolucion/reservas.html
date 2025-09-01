@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Sabores del Mundo — Reservas y Contacto</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Reservas en línea y datos de contacto del restaurante Sabores del Mundo.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1 class="logo">Sabores del Mundo</h1>
+    <nav aria-label="Navegación principal">
+      <ul class="menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="menu.html">Menú</a></li>
+        <li><a href="reservas.html">Reservas y Contacto</a></li>
+        <li><a href="galeria.html">Galería</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section aria-labelledby="form-reservas">
+      <h2 id="form-reservas">Reservá tu mesa</h2>
+
+      <form action="#" method="post" id="formReserva">
+        <fieldset>
+          <legend>Datos de contacto</legend>
+
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" name="nombre" required placeholder="Tu nombre completo">
+
+          <label for="correo">Correo electrónico</label>
+          <input type="email" id="correo" name="correo" required placeholder="tu@correo.com">
+
+          <label for="telefono">Teléfono</label>
+          <input type="tel" id="telefono" name="telefono" required placeholder="+54 9 ...">
+
+        </fieldset>
+
+        <fieldset>
+          <legend>Detalle de la reserva</legend>
+
+          <label for="personas">Cantidad de personas</label>
+          <input type="number" id="personas" name="personas" min="1" max="12" required>
+
+          <label for="fecha">Fecha</label>
+          <input type="date" id="fecha" name="fecha" required>
+
+          <label for="hora">Hora</label>
+          <input type="time" id="hora" name="hora" required>
+        </fieldset>
+
+        <button type="submit" class="btn">Enviar</button>
+      </form>
+    </section>
+
+    <section aria-labelledby="tabla-reservas">
+      <h2 id="tabla-reservas">Reservas del día (simulación)</h2>
+
+      <table class="tabla-reservas">
+        <thead>
+          <tr>
+            <th>Mesa</th>
+            <th>Nombre</th>
+            <th>Personas</th>
+            <th>Hora</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- rowspan: misma mesa con dos horarios contiguos -->
+          <tr>
+            <td rowspan="2">1</td>
+            <td>María P.</td>
+            <td>2</td>
+            <td>20:00</td>
+          </tr>
+          <tr>
+            <td>Juan R.</td>
+            <td>4</td>
+            <td>22:00</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Lucía G.</td>
+            <td>3</td>
+            <td>21:00</td>
+          </tr>
+          <!-- colspan: bloqueado -->
+          <tr>
+            <td>3</td>
+            <td colspan="3">Bloqueada por evento privado</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Esteban Q.</td>
+            <td>5</td>
+            <td>20:30</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer>
+    <address>
+      Av. Sabores 1234, Ciudad. Tel: <a href="tel:+5491100000000">+54 9 11 0000-0000</a>
+    </address>
+    <p>Síguenos:
+      <a href="https://www.instagram.com" target="_blank" rel="noopener">Instagram</a> ·
+      <a href="https://www.facebook.com" target="_blank" rel="noopener">Facebook</a> ·
+      <a href="https://twitter.com" target="_blank" rel="noopener">X/Twitter</a>
+    </p>
+    <small>&copy; <time datetime="2025">2025</time> Sabores del Mundo</small>
+  </footer>
+</body>
+</html>
