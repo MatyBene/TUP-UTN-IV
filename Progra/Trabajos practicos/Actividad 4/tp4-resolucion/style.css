@@ -1,0 +1,13 @@
+ body { 
+   font-family: Arial, sans-serif; padding: 20px; 
+   background-color: beige;
+}
+
+ul { 
+   list-style-type: none; padding: 0; 
+}
+
+li { 
+   margin: 5px 0; cursor: pointer; 
+}
+  
