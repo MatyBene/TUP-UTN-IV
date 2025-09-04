@@ -80,41 +80,41 @@
 
 
 
-// function irAlSupermercado() {
-//   return new Promise((resolve) => {
-//     setTimeout(() => {
-//       console.log("Fui al supermercado");
-//       resolve();
-//     }, 1000);
-//   });
-// }
+function irAlSupermercado() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      console.log("Fui al supermercado");
+      resolve();
+    }, 1000);
+  });
+}
 
-// function comprarIngredientes() {
-//   return new Promise((resolve) => {
-//     setTimeout(() => {
-//       console.log("Compré los ingredientes");
-//       resolve();
-//     }, 1000);
-//   });
-// }
+function comprarIngredientes() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      console.log("Compré los ingredientes");
+      resolve();
+    }, 1000);
+  });
+}
 
-// function cocinar() {
-//   return new Promise((resolve) => {
-//     setTimeout(() => {
-//       console.log("Cociné la comida");
-//       resolve();
-//     }, 1000);
-//   });
-// }
+function cocinar() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      console.log("Cociné la comida");
+      resolve();
+    }, 1000);
+  });
+}
 
-// function comer() {
-//   return new Promise((resolve) => {
-//     setTimeout(() => {
-//       console.log("Comí la comida");
-//       resolve();
-//     }, 1000);
-//   });
-// }
+function comer() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      console.log("Comí la comida");
+      resolve();
+    }, 1000);
+  });
+}
 
 
 // irAlSupermercado()
@@ -126,15 +126,15 @@
 //   });
 
 
-// async function prepararComida() {
-//   await irAlSupermercado();
-//   await comprarIngredientes();
-//   await cocinar();
-//   await comer();
-//   console.log("¡Todo hecho!");
-// }
+async function prepararComida() {
+  await irAlSupermercado();
+  await comprarIngredientes();
+  await cocinar();
+  await comer();
+  console.log("¡Todo hecho!");
+}
 
-// prepararComida();
+prepararComida();
 
 
 

@@ -1,0 +1,47 @@
+@startuml Ejercicio5_ReproduccionSpotify
+
+!theme plain
+
+actor Usuario
+entity Lista
+control Sistema
+control Servidor
+control Reproductor
+
+Usuario -> Lista : seleccionarCancion()
+activate Lista
+
+Lista -> Sistema : obtenerCancion(id)
+activate Sistema
+note right : Envía datos:\nID, título, artista
+
+Sistema -> Servidor : buscarCancion(cancion)
+activate Servidor
+note right : Busca archivo\nen biblioteca musical
+
+alt Canción encontrada
+    Servidor --> Sistema : obtenerURL(cancion)
+    deactivate Servidor
+    note right : Devuelve URL del\narchivo de audio
+    
+    Sistema -> Reproductor : reproducir(url)
+    activate Reproductor
+    note right : Inicia streaming\nde la canción
+    
+    Reproductor --> Usuario : reproduciendo()
+    note left : "Reproduciendo:\nNombre - Artista"
+    
+    deactivate Reproductor
+    
+else Canción no encontrada
+    Servidor --> Sistema : cancionNoDisponible()
+    deactivate Servidor
+    
+    Sistema -> Usuario : mostrarError()
+    note left : "Canción no disponible"
+end
+
+deactivate Sistema
+deactivate Lista
+
+@enduml

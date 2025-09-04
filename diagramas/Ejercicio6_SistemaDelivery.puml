@@ -1,0 +1,55 @@
+@startuml Ejercicio6_SistemaDelivery
+
+!theme plain
+
+actor Cliente
+control Sistema
+control Restaurante
+actor Repartidor
+
+Cliente -> Sistema : realizarPedido()
+activate Sistema
+note right : Cliente selecciona\nrestaurante y productos
+
+Sistema -> Restaurante : enviarPedido(restaurante)
+activate Restaurante
+note right : Envía detalles del\npedido y ubicación
+
+alt Productos disponibles
+    Restaurante -> Sistema : confirmarDisponibilidad()
+    note left : "Pedido confirmado,\ntiempo estimado: 30min"
+    
+    Restaurante -> Repartidor : asignarRepartidor()
+    activate Repartidor
+    note right : Busca repartidor\ncercano disponible
+    
+    alt Repartidor acepta
+        Repartidor -> Restaurante : aceptarPedido()
+        note left : "Pedido aceptado,\nen camino al restaurante"
+        
+        Restaurante -> Sistema : actualizarEstado("en_preparacion")
+        note left : Estado actualizado
+        
+        Sistema -> Cliente : confirmarPedido()
+        note left : "Pedido confirmado,\nseguí el estado en la app"
+        
+        deactivate Repartidor
+        
+    else Repartidor rechaza
+        Repartidor -> Restaurante : rechazarPedido()
+        note left : "Buscar otro repartidor"
+        deactivate Repartidor
+    end
+    
+else Productos no disponibles
+    Restaurante -> Sistema : rechazarPedido()
+    note left : "Algunos productos\nno están disponibles"
+    
+    Sistema -> Cliente : mostrarError()
+    note left : "Pedido no disponible"
+end
+
+deactivate Restaurante
+deactivate Sistema
+
+@enduml

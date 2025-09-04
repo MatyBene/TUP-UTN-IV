@@ -1,0 +1,59 @@
+@startuml Ejercicio8_BibliotecaEnLinea
+
+!theme plain
+
+actor Alumno
+control Sistema
+control Catalogo
+entity Libro
+
+Alumno -> Sistema : buscarLibro(titulo)
+activate Sistema
+note right : Alumno ingresa título\no palabra clave
+
+Sistema -> Catalogo : consultarCatalogo(titulo)
+activate Catalogo
+note right : Busca en base de datos\nde la biblioteca
+
+alt Libro encontrado
+    Catalogo -> Libro : obtenerLibro(titulo)
+    activate Libro
+    
+    Libro --> Catalogo : datosLibro()
+    note left : Devuelve información:\ntítulo, autor, ISBN, etc.
+    deactivate Libro
+    
+    Catalogo --> Sistema : libroEncontrado()
+    deactivate Catalogo
+    
+    Sistema -> Libro : verificarDisponibilidad()
+    activate Libro
+    
+    alt Libro disponible
+        Libro --> Sistema : estado("disponible")
+        note left : Libro puede ser\nprestado
+        
+        Sistema -> Alumno : mostrarResultado("disponible")
+        note left : "Libro disponible\npara préstamo"
+        
+    else Libro prestado
+        Libro --> Sistema : estado("prestado")
+        note left : Libro ya está\nprestado
+        
+        Sistema -> Alumno : mostrarResultado("prestado")
+        note left : "Libro prestado,\nfecha de devolución: XX"
+    end
+    
+    deactivate Libro
+    
+else Libro no encontrado
+    Catalogo --> Sistema : libroNoEncontrado()
+    deactivate Catalogo
+    
+    Sistema -> Alumno : mostrarResultado("no_encontrado")
+    note left : "Libro no encontrado\nen el catálogo"
+end
+
+deactivate Sistema
+
+@enduml

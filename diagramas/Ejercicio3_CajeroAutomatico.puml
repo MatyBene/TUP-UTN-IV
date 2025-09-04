@@ -1,0 +1,51 @@
+@startuml Ejercicio3_CajeroAutomatico
+
+!theme plain
+
+actor Cliente
+control Cajero
+control Banco
+entity Tarjeta
+
+Cliente -> Cajero : insertarTarjeta()
+activate Cajero
+
+Cajero -> Banco : validarTarjeta()
+activate Banco
+note right : Verifica datos\nde la tarjeta
+
+alt Tarjeta válida
+    Banco --> Cajero : tarjetaValida()
+    deactivate Banco
+    
+    Cajero -> Cliente : solicitarPIN()
+    Cliente -> Cajero : ingresarPIN()
+    
+    Cajero -> Banco : validarPIN()
+    activate Banco
+    
+    alt PIN correcto
+        Banco --> Cajero : PINValido()
+        deactivate Banco
+        
+        Cajero -> Cliente : permitirRetiro()
+        Cliente -> Cajero : retirarDinero()
+        note left : Selecciona monto\ny confirma retiro
+        
+    else PIN incorrecto
+        Banco --> Cajero : PINInvalido()
+        deactivate Banco
+        Cajero -> Cliente : mostrarError()
+        note left : "PIN incorrecto"
+    end
+    
+else Tarjeta inválida
+    Banco --> Cajero : tarjetaInvalida()
+    deactivate Banco
+    Cajero -> Cliente : devolverTarjeta()
+    note left : "Tarjeta no válida"
+end
+
+deactivate Cajero
+
+@enduml

@@ -1,0 +1,57 @@
+@startuml Ejercicio7_LoginDosFactores
+
+!theme plain
+
+actor Usuario
+control Sistema
+database BD
+control ServicioSMS
+
+Usuario -> Sistema : ingresarCredenciales()
+activate Sistema
+note right : Email y contraseña
+
+Sistema -> BD : validarUsuario(email, pass)
+activate BD
+
+alt Credenciales válidas
+    BD -> Sistema : consultarUsuario(email, pass)
+    note left : Usuario encontrado\ny contraseña correcta
+    deactivate BD
+    
+    Sistema -> ServicioSMS : enviarCodigo2FA()
+    activate ServicioSMS
+    note right : Solicita envío de\ncódigo al teléfono
+    
+    ServicioSMS -> Sistema : enviarCodigo(telefono)
+    note left : "Código enviado\nvía SMS"
+    deactivate ServicioSMS
+    
+    Sistema -> Usuario : solicitarCodigo()
+    note left : "Ingresa el código\nenviado a tu teléfono"
+    
+    Usuario -> Sistema : ingresarCodigo()
+    
+    Sistema -> Sistema : validarCodigo()
+    note right : Verifica código y\ntiempo de expiración
+    
+    alt Código válido
+        Sistema -> Usuario : concederAcceso()
+        note left : "Acceso concedido,\nbienvenido al sistema"
+        
+    else Código inválido
+        Sistema -> Usuario : mostrarError()
+        note left : "Código incorrecto\no expirado"
+    end
+    
+else Credenciales inválidas
+    BD -> Sistema : usuarioNoEncontrado()
+    deactivate BD
+    
+    Sistema -> Usuario : mostrarError()
+    note left : "Email o contraseña\nincorrectos"
+end
+
+deactivate Sistema
+
+@enduml

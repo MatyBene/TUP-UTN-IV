@@ -1,0 +1,31 @@
+@startuml Ejercicio2_CompraCarrito
+
+!theme plain
+
+actor Cliente
+entity Producto
+control Carrito
+boundary Pantalla
+
+Cliente -> Producto : seleccionarProducto()
+activate Producto
+
+Producto -> Carrito : agregarProducto()
+activate Carrito
+note right : Añade producto con\nprecio y características
+
+Carrito -> Carrito : calcularTotal()
+note right : Recalcula:\n- Subtotales\n- Descuentos\n- Impuestos
+
+Carrito -> Pantalla : mostrarTotal()
+activate Pantalla
+note right : Actualiza visualización
+
+Pantalla -> Cliente : mostrarCarritoActualizado()
+note left : Muestra nuevo total
+
+deactivate Pantalla
+deactivate Carrito
+deactivate Producto
+
+@enduml

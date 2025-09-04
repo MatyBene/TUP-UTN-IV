@@ -1,0 +1,36 @@
+@startuml Ejercicio1_RegistroUsuario
+
+!theme plain
+
+actor Usuario
+boundary Formulario
+control Sistema  
+database BD
+
+Usuario -> Formulario : completarFormulario()
+activate Formulario
+
+Formulario -> Sistema : enviarDatos()
+activate Sistema
+
+Sistema -> Sistema : validarDatos()
+note right : Valida email, contraseña,\ncampos obligatorios
+
+alt Datos válidos
+    Sistema -> BD : guardarUsuario()
+    activate BD
+    BD --> Sistema : confirmación
+    deactivate BD
+    
+    Sistema -> Usuario : confirmarRegistro()
+    note left : "Usuario registrado\nexitosamente"
+    
+else Datos inválidos
+    Sistema -> Usuario : mostrarError()
+    note left : "Error en validación"
+end
+
+deactivate Sistema
+deactivate Formulario
+
+@enduml

@@ -1,0 +1,61 @@
+@startuml Ejercicio4_PagoCafeteria
+
+!theme plain
+
+actor Cliente
+entity Pedido
+control Sistema
+entity Cupon
+control MedioPago
+
+Cliente -> Sistema : confirmarPedido()
+activate Sistema
+
+Sistema -> Pedido : calcularTotal()
+activate Pedido
+Pedido --> Sistema : totalCalculado
+deactivate Pedido
+
+alt Tiene cupón
+    Sistema -> Cupon : validar()
+    activate Cupon
+    
+    alt Cupón válido
+        Cupon --> Sistema : esValido()
+        Sistema -> Cupon : aplicarCupon()
+        note right : Aplica descuento\nal total
+        Cupon --> Sistema : totalConDescuento
+        deactivate Cupon
+    else Cupón inválido
+        Cupon --> Sistema : noValido()
+        deactivate Cupon
+        note right : Continúa con\ntotal original
+    end
+end
+
+Sistema -> MedioPago : procesarPago(monto)
+activate MedioPago
+note right : Tarjeta, transferencia\no MercadoPago
+
+alt Pago exitoso
+    MedioPago --> Sistema : pagoConfirmado()
+    deactivate MedioPago
+    
+    Sistema -> Pedido : actualizarEstado("pagado")
+    activate Pedido
+    deactivate Pedido
+    
+    Sistema -> Cliente : confirmarPago()
+    note left : "Pago procesado\nexitosamente"
+    
+else Pago rechazado
+    MedioPago --> Sistema : pagoRechazado()
+    deactivate MedioPago
+    
+    Sistema -> Cliente : mostrarError()
+    note left : "Error en el pago"
+end
+
+deactivate Sistema
+
+@enduml
