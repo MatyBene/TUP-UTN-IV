@@ -1,0 +1,66 @@
+@startuml Cafeteria_Diagrama_Actividad
+title Diagrama de Actividad - Proceso de Pedido en Cafetería Latte&Code
+
+start
+
+:Cliente solicita hacer pedido;
+:Empleado inicia proceso de pedido;
+:Sistema crea nuevo pedido para la sucursal;
+
+repeat
+    :Cliente especifica producto deseado;
+    :Empleado agrega producto al pedido;
+    :Sistema valida disponibilidad del producto;
+    if (¿Producto disponible?) then (Sí)
+        :Sistema agrega item al pedido;
+    else (No)
+        :Sistema notifica producto no disponible;
+        :Empleado informa al cliente;
+    endif
+    :Empleado pregunta si desea más productos;
+repeat while (¿Cliente desea agregar más productos?) is (Sí)
+-> No;
+
+:Empleado pregunta por cupón de descuento;
+if (¿Cliente tiene cupón?) then (Sí)
+    :Cliente entrega cupón;
+    :Sistema valida cupón;
+    if (¿Cupón válido?) then (Sí)
+        :Sistema calcula descuento aplicable;
+        :Sistema aplica descuento al pedido;
+    else (No)
+        :Sistema rechaza cupón;
+        :Empleado informa cupón inválido;
+    endif
+else (No)
+    :Continúa sin descuento;
+endif
+
+:Sistema calcula precio base de productos;
+:Sistema aplica precios según sucursal;
+:Sistema calcula total final;
+:Sistema muestra total al empleado;
+:Empleado informa total al cliente;
+
+:Cliente especifica método de pago;
+:Sistema valida método de pago;
+if (¿Método de pago válido?) then (Sí)
+    :Sistema procesa el pago;
+    if (¿Pago exitoso?) then (Sí)
+        :Sistema registra pago confirmado;
+        :Sistema marca pedido como pagado;
+        :Sistema genera ticket con detalles;
+        :Empleado entrega ticket al cliente;
+        :Cliente recibe ticket;
+        stop
+    else (No)
+        :Sistema notifica error en pago;
+        :Empleado informa problema al cliente;
+        :Cliente debe elegir otro método de pago;
+    endif
+else (No)
+    :Sistema rechaza método de pago;
+    :Empleado solicita método válido;
+endif
+
+@enduml

@@ -1,0 +1,292 @@
+@startuml Taller_Diagrama_Secuencia_MVC
+title Diagrama de Secuencia MVC - Sistema Taller Mecánico
+
+actor Cliente
+participant "Mecánico" as M
+
+' === CAPA VISTA ===
+participant "ReparacionView" as RV
+participant "HistorialView" as HV
+participant "InventarioView" as IV
+participant "FacturaView" as FV
+
+' === CAPA CONTROLADOR ===
+participant "ReparacionController" as RC
+participant "VehiculoController" as VC
+participant "InventarioController" as IC
+participant "FacturacionController" as FC
+
+' === CAPA MODELO ===
+participant "ReparacionModel" as RM
+participant "VehiculoModel" as VM
+participant "ClienteModel" as CM
+participant "PiezaModel" as PM
+participant "AccionModel" as AM
+participant "FacturaModel" as FM
+
+' === CAPA REPOSITORY ===
+participant "ReparacionRepository" as RR
+participant "VehiculoRepository" as VR
+participant "ClienteRepository" as CR
+participant "PiezaRepository" as PR
+participant "AccionRepository" as AR
+participant "FacturaRepository" as FR
+
+Cliente -> M: Trae vehículo al taller
+activate M
+M -> RV: iniciarRegistroVehiculo()
+activate RV
+
+RV -> VC: buscarVehiculo(matricula)
+activate VC
+VC -> VM: consultarVehiculo(matricula)
+activate VM
+VM -> VR: findByMatricula(matricula)
+activate VR
+VR --> VM: vehiculoEntity
+deactivate VR
+VM --> VC: vehiculoEncontrado
+deactivate VM
+VC --> RV: resultadoBusqueda
+deactivate VC
+
+alt Vehículo ya registrado
+    RV -> VC: obtenerCliente(vehiculoId)
+    activate VC
+    VC -> CM: buscarClientePorVehiculo(vehiculoId)
+    activate CM
+    CM -> CR: findClienteByVehiculoId(vehiculoId)
+    activate CR
+    CR --> CM: clienteEntity
+    deactivate CR
+    CM --> VC: datosCliente
+    deactivate CM
+    VC --> RV: clienteEncontrado
+    deactivate VC
+    
+    M -> RV: consultarHistorial(vehiculoId)
+    RV -> HV: mostrarHistorial(vehiculoId)
+    activate HV
+    HV -> VC: obtenerHistorialReparaciones(vehiculoId)
+    activate VC
+    VC -> VM: getHistorialCompleto(vehiculoId)
+    activate VM
+    VM -> VR: findHistorialByVehiculoId(vehiculoId)
+    activate VR
+    VR --> VM: historialReparaciones
+    deactivate VR
+    VM --> VC: historialDetallado
+    deactivate VM
+    VC --> HV: historialCompleto
+    deactivate VC
+    HV --> M: mostrarHistorial
+    deactivate HV
+else Vehículo nuevo
+    M -> RV: registrarNuevoVehiculo(datosVehiculo, datosCliente)
+    RV -> VC: crearVehiculo(datosVehiculo)
+    activate VC
+    VC -> VM: new VehiculoModel(datosVehiculo)
+    activate VM
+    VM -> CM: buscarOCrearCliente(datosCliente)
+    activate CM
+    CM -> CR: findOrCreate(datosCliente)
+    activate CR
+    CR --> CM: clienteEntity
+    deactivate CR
+    CM --> VM: clienteId
+    deactivate CM
+    VM -> VR: save(vehiculo, clienteId)
+    activate VR
+    VR --> VM: vehiculoGuardado
+    deactivate VR
+    VM --> VC: vehiculoCreado
+    deactivate VM
+    VC --> RV: confirmacionCreacion
+    deactivate VC
+end
+
+M -> RV: registrarMotivoIngreso(motivoReparacion)
+RV -> RC: iniciarReparacion(vehiculoId, motivo, kilometraje)
+activate RC
+RC -> RM: new ReparacionModel(vehiculoId, motivo, kilometraje)
+activate RM
+RM -> RR: save(reparacion)
+activate RR
+RR --> RM: reparacionCreada
+deactivate RR
+RM --> RC: reparacionId
+deactivate RM
+RC --> RV: reparacionIniciada
+deactivate RC
+RV --> M: confirmaciónRegistro
+deactivate RV
+
+' === PROCESO DE REPARACIÓN ===
+loop Para cada acción de reparación
+    M -> RV: agregarAccion(codigoAccion, tiempoEmpleado)
+    activate RV
+    RV -> RC: registrarAccion(reparacionId, codigoAccion, tiempoEmpleado)
+    activate RC
+    RC -> AM: buscarAccion(codigoAccion)
+    activate AM
+    AM -> AR: findByCodigo(codigoAccion)
+    activate AR
+    AR --> AM: accionEntity
+    deactivate AR
+    AM --> RC: accionDetalle
+    deactivate AM
+    
+    RC -> RM: agregarAccion(reparacionId, accion, tiempo)
+    activate RM
+    RM -> RR: saveAccionReparacion(reparacionId, accionId, tiempo)
+    activate RR
+    RR --> RM: accionGuardada
+    deactivate RR
+    RM --> RC: accionRegistrada
+    deactivate RM
+    RC --> RV: accionAgregada
+    deactivate RC
+    RV --> M: confirmaciónAcción
+    deactivate RV
+end
+
+loop Para cada pieza necesaria
+    M -> RV: verificarPieza(codigoPieza)
+    activate RV
+    RV -> IC: consultarStock(codigoPieza)
+    activate IC
+    IC -> PM: verificarDisponibilidad(codigoPieza)
+    activate PM
+    PM -> PR: findStockByCodigo(codigoPieza)
+    activate PR
+    PR --> PM: stockActual
+    deactivate PR
+    PM --> IC: disponibilidad
+    deactivate PM
+    IC --> RV: estadoStock
+    deactivate IC
+    
+    alt Pieza disponible
+        RV -> IC: reservarPieza(codigoPieza, cantidad)
+        activate IC
+        IC -> PM: reservarStock(codigoPieza, cantidad)
+        activate PM
+        PM -> PR: updateStock(codigoPieza, cantidadReservada)
+        activate PR
+        PR --> PM: stockActualizado
+        deactivate PR
+        PM --> IC: piezaReservada
+        deactivate PM
+        IC --> RV: reservaConfirmada
+        deactivate IC
+        
+        M -> RV: utilizarPieza(reparacionId, codigoPieza)
+        RV -> RC: registrarPiezaUtilizada(reparacionId, codigoPieza)
+        activate RC
+        RC -> RM: agregarPieza(reparacionId, piezaId)
+        activate RM
+        RM -> RR: savePiezaReparacion(reparacionId, piezaId)
+        activate RR
+        RR --> RM: piezaGuardada
+        deactivate RR
+        RM --> RC: piezaRegistrada
+        deactivate RM
+        RC --> RV: piezaAgregada
+        deactivate RC
+    else Pieza no disponible
+        RV -> IC: solicitarFabricante(codigoPieza)
+        activate IC
+        IC -> PM: crearSolicitudFabricante(codigoPieza)
+        activate PM
+        PM -> PR: saveSolicitudFabricante(codigoPieza, fechaSolicitud)
+        activate PR
+        PR --> PM: solicitudCreada
+        deactivate PR
+        PM --> IC: solicitudRegistrada
+        deactivate PM
+        IC --> RV: solicitudEnviada
+        deactivate IC
+        RV --> M: esperandoPieza
+        
+        ' Nota: Este proceso se repetiría cuando llegue la pieza
+        note right: El proceso continúa cuando\nllega la pieza del fabricante
+    end
+    deactivate RV
+end
+
+M -> RV: finalizarReparacion(reparacionId)
+activate RV
+RV -> RC: completarReparacion(reparacionId, fechaSalida, kilometrajeSalida)
+activate RC
+RC -> RM: marcarCompletada(reparacionId, fechaSalida, kilometrajeSalida)
+activate RM
+RM -> RR: updateEstado(reparacionId, "COMPLETADA", fechaSalida, kmSalida)
+activate RR
+RR --> RM: reparacionActualizada
+deactivate RR
+RM --> RC: reparacionCompletada
+deactivate RM
+
+' === GENERACIÓN DE FACTURA ===
+RC -> FC: generarFactura(reparacionId)
+activate FC
+FC -> FM: calcularFactura(reparacionId)
+activate FM
+FM -> RR: findDetallesFacturacion(reparacionId)
+activate RR
+RR --> FM: detallesReparacion
+deactivate RR
+
+' Cálculo de mano de obra
+FM -> AR: findAccionesByReparacion(reparacionId)
+activate AR
+AR --> FM: accionesRealizadas
+deactivate AR
+
+' Cálculo de piezas
+FM -> PR: findPiezasByReparacion(reparacionId)
+activate PR
+PR --> FM: piezasUtilizadas
+deactivate PR
+
+FM -> FR: save(factura)
+activate FR
+FR --> FM: facturaGuardada
+deactivate FR
+FM --> FC: facturaGenerada
+deactivate FM
+FC --> RC: facturaCreada
+deactivate FC
+RC --> RV: facturaLista
+deactivate RC
+
+RV -> FV: mostrarFactura(facturaId)
+activate FV
+FV --> M: facturaDetallada
+M -> Cliente: Notificar reparación terminada
+deactivate FV
+deactivate RV
+
+Cliente -> M: Viene a recoger vehículo
+M -> FV: procesarPago(facturaId, metodoPago)
+activate FV
+FV -> FC: registrarPago(facturaId, metodoPago, monto)
+activate FC
+FC -> FM: marcarPagada(facturaId)
+activate FM
+FM -> FR: updateEstadoPago(facturaId, "PAGADA")
+activate FR
+FR --> FM: pagoRegistrado
+deactivate FR
+FM --> FC: facturaActualizada
+deactivate FM
+FC --> FV: pagoConfirmado
+deactivate FC
+FV --> M: entregaAutorizada
+deactivate FV
+
+M -> Cliente: Entrega vehículo y factura
+Cliente --> M: Recibe vehículo
+deactivate M
+
+@enduml

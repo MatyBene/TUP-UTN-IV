@@ -1,0 +1,161 @@
+@startuml Fabrica_Diagrama_Actividad
+title Diagrama de Actividad - Proceso de Fabricación AutoTech Industries
+
+start
+
+:Concesionario solicita fabricar SUV;
+:Operador de fábrica recibe solicitud;
+:Sistema crea nuevo pedido de fabricación;
+:Sistema asigna número de seguimiento;
+
+' === CONFIGURACIÓN DEL VEHÍCULO ===
+:Sistema consulta opciones disponibles para SUV;
+:Sistema muestra configuraciones posibles;
+note right: Motor: nafta/diésel/eléctrico\nTransmisión: manual/automática\nColores disponibles\nPaquetes de accesorios
+
+:Operador consulta especificaciones al concesionario;
+:Concesionario especifica configuración deseada;
+:Sistema valida configuración seleccionada;
+
+if (¿Configuración válida?) then (Sí)
+    :Sistema asigna configuración al vehículo;
+    :Sistema registra observaciones especiales;
+else (No)
+    :Sistema rechaza configuración;
+    :Operador informa error al concesionario;
+    :Concesionario debe corregir especificaciones;
+endif
+
+' === CÁLCULO DE COSTOS ===
+:Sistema calcula costo de producción;
+:Sistema suma costos de componentes;
+:Sistema calcula mano de obra estimada;
+:Sistema genera estimación de fecha de finalización;
+:Operador informa costos y tiempos al concesionario;
+
+if (¿Concesionario acepta?) then (Sí)
+    :Sistema confirma pedido;
+    :Sistema programa inicio de producción;
+else (No)
+    :Sistema cancela pedido;
+    :Proceso terminado;
+    stop
+endif
+
+' === INICIO DE ENSAMBLADO ===
+:Sistema inicia proceso de ensamblado;
+:Sistema crea registro de producción;
+:Sistema genera lista de componentes necesarios;
+
+' === ENSAMBLADO POR ETAPAS ===
+repeat
+    :Sistema determina siguiente etapa;
+    
+    partition "Ensamblado de Motor" {
+        if (¿Etapa = Motor?) then (Sí)
+            :Sistema obtiene componentes del motor especificado;
+            :Operadores ensamblan motor;
+            :Sistema registra componentes utilizados;
+            :Sistema registra tiempo empleado;
+            :Sistema marca etapa como completada;
+        endif
+    }
+    
+    partition "Ensamblado de Transmisión" {
+        if (¿Etapa = Transmisión?) then (Sí)
+            :Sistema obtiene componentes de transmisión;
+            :Operadores instalan transmisión;
+            :Sistema registra componentes utilizados;
+            :Sistema registra tiempo empleado;
+            :Sistema marca etapa como completada;
+        endif
+    }
+    
+    partition "Instalación de Accesorios" {
+        if (¿Etapa = Accesorios?) then (Sí)
+            :Sistema obtiene lista de accesorios;
+            :Operadores instalan cada accesorio;
+            :Sistema registra accesorios instalados;
+            :Sistema registra tiempo empleado;
+            :Sistema marca etapa como completada;
+        endif
+    }
+    
+    partition "Acabado y Pintura" {
+        if (¿Etapa = Acabado?) then (Sí)
+            :Operadores aplican color especificado;
+            :Sistema registra materiales utilizados;
+            :Sistema registra tiempo de secado;
+            :Sistema marca etapa como completada;
+        endif
+    }
+    
+    :Sistema actualiza progreso del vehículo;
+    :Sistema actualiza costos reales;
+    
+repeat while (¿Quedan etapas de ensamblado?) is (Sí)
+-> No;
+
+:Sistema marca ensamblado como completado;
+:Sistema calcula tiempo total de producción;
+:Sistema calcula costo real de producción;
+
+' === VERIFICACIÓN DE CALIDAD ===
+:Sistema inicia verificación de calidad;
+:Inspector realiza revisión completa;
+
+partition "Inspecciones de Calidad" {
+    :Verificar funcionamiento del motor;
+    :Probar sistema de transmisión;
+    :Verificar instalación de accesorios;
+    :Revisar acabado y pintura;
+    :Probar sistemas eléctricos;
+    :Verificar medidas de seguridad;
+}
+
+:Sistema registra resultados de cada verificación;
+
+if (¿Todas las verificaciones aprobadas?) then (Sí)
+    :Sistema marca vehículo como APROBADO;
+    :Sistema actualiza estado a "TERMINADO";
+else (No)
+    :Sistema marca vehículo como RECHAZADO;
+    :Sistema registra defectos encontrados;
+    :Sistema determina acciones correctivas;
+    
+    if (¿Defectos menores?) then (Sí)
+        :Realizar correcciones menores;
+        :Repetir verificación de calidad;
+    else (No)
+        :Requiere re-ensamblado parcial;
+        :Volver a etapa específica del ensamblado;
+    endif
+endif
+
+' === REGISTRO FINAL ===
+:Sistema registra vehículo como terminado;
+:Sistema actualiza inventario de componentes;
+:Sistema calcula costos finales;
+
+' === GENERACIÓN DE INFORME ===
+:Sistema recopila datos completos del vehículo;
+note right: Incluye: configuración final,\ncomponentes utilizados,\ntiempos de producción,\ncostos reales,\nresultados de calidad
+
+:Sistema genera informe detallado;
+:Sistema incluye certificación de calidad;
+:Sistema adjunta especificaciones técnicas;
+
+:Operador entrega informe al concesionario;
+:Concesionario recibe documentación completa;
+
+if (¿Concesionario solicita entrega?) then (Sí)
+    :Sistema programa entrega del vehículo;
+    :Sistema genera documentos de entrega;
+    :Vehículo entregado al concesionario;
+else (No)
+    :Vehículo almacenado hasta solicitud de entrega;
+endif
+
+stop
+
+@enduml

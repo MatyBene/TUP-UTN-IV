@@ -1,0 +1,340 @@
+@startuml Fabrica_Diagrama_Secuencia_MVC
+title Diagrama de Secuencia MVC - Sistema Fábrica Automotriz AutoTech Industries
+
+actor Concesionario
+participant "OperadorFabrica" as OF
+
+' === CAPA VISTA ===
+participant "PedidoView" as PV
+participant "ConfiguracionView" as CV
+participant "EnsambladoView" as EV
+participant "CalidadView" as CLV
+participant "InformeView" as IV
+
+' === CAPA CONTROLADOR ===
+participant "PedidoController" as PC
+participant "VehiculoController" as VC
+participant "ProduccionController" as PRC
+participant "CalidadController" as CC
+participant "InformeController" as IC
+
+' === CAPA MODELO ===
+participant "PedidoModel" as PM
+participant "VehiculoModel" as VM
+participant "ConfiguracionModel" as CM
+participant "ComponenteModel" as COM
+participant "ProduccionModel" as PRM
+participant "CalidadModel" as CLM
+participant "CostoModel" as COSM
+
+' === CAPA REPOSITORY ===
+participant "PedidoRepository" as PR
+participant "VehiculoRepository" as VR
+participant "ConfiguracionRepository" as CR
+participant "ComponenteRepository" as COMR
+participant "ProduccionRepository" as PRMR
+participant "CalidadRepository" as CLR
+participant "CostoRepository" as COSR
+
+Concesionario -> OF: Solicita fabricar SUV
+activate OF
+OF -> PV: iniciarPedidoFabricacion()
+activate PV
+
+PV -> PC: crearNuevoPedido(concesionarioId, tipoVehiculo)
+activate PC
+PC -> PM: new PedidoModel(concesionarioId, "SUV")
+activate PM
+PM -> PR: save(pedido)
+activate PR
+PR --> PM: pedidoCreado
+deactivate PR
+PM --> PC: numeroSeguimiento
+deactivate PM
+PC --> PV: pedidoIniciado
+deactivate PC
+PV --> OF: confirmaciónPedido(numeroSeguimiento)
+deactivate PV
+
+' === CONFIGURACIÓN DEL VEHÍCULO ===
+OF -> CV: configurarVehiculo(numeroSeguimiento)
+activate CV
+CV -> VC: obtenerOpcionesDisponibles("SUV")
+activate VC
+VC -> CM: getConfiguracionesPorTipo("SUV")
+activate CM
+CM -> CR: findConfiguracionesByTipoVehiculo("SUV")
+activate CR
+CR --> CM: opcionesDisponibles
+deactivate CR
+CM --> VC: configuracionesDisponibles
+deactivate CM
+VC --> CV: opcionesCompletas
+deactivate VC
+CV --> OF: mostrarOpciones(motores, transmisiones, colores, accesorios)
+deactivate CV
+
+OF -> Concesionario: Consulta especificaciones deseadas
+Concesionario --> OF: Especifica configuración(motor: eléctrico, transmisión: automática, color: rojo, accesorios: [pantalla_tactil, camara_retroceso])
+
+OF -> CV: confirmarConfiguracion(numeroSeguimiento, configuracionSeleccionada)
+activate CV
+CV -> VC: asignarConfiguracion(numeroSeguimiento, configuracion)
+activate VC
+VC -> VM: new VehiculoModel(numeroSeguimiento, configuracion)
+activate VM
+VM -> CM: validarConfiguracion(configuracion)
+activate CM
+CM -> CR: validateConfiguracion(configuracion)
+activate CR
+CR --> CM: configuracionValida
+deactivate CR
+CM --> VM: validacionOK
+deactivate CM
+
+VM -> VR: save(vehiculo)
+activate VR
+VR --> VM: vehiculoCreado
+deactivate VR
+VM --> VC: vehiculoConfigurado
+deactivate VM
+VC --> CV: configuracionAsignada
+deactivate VC
+CV --> OF: configuracionCompleta
+deactivate CV
+
+' === CÁLCULO DE COSTOS ===
+OF -> CV: calcularCostoProduccion(numeroSeguimiento)
+activate CV
+CV -> VC: obtenerCostoTotal(numeroSeguimiento)
+activate VC
+VC -> COSM: calcularCostoCompleto(vehiculoId)
+activate COSM
+COSM -> COSR: findCostosByConfiguracion(vehiculoId)
+activate COSR
+COSR --> COSM: costosDetallados
+deactivate COSR
+
+COSM -> COMR: findComponentesByVehiculo(vehiculoId)
+activate COMR
+COMR --> COSM: componentesNecesarios
+deactivate COMR
+COSM --> VC: costoTotalCalculado
+deactivate COSM
+VC --> CV: costoFinal
+deactivate VC
+CV --> OF: mostrarCosto(costoTotal)
+deactivate CV
+
+' === INICIO DE ENSAMBLADO ===
+OF -> EV: iniciarEnsamblado(numeroSeguimiento)
+activate EV
+EV -> PRC: comenzarProduccion(numeroSeguimiento)
+activate PRC
+PRC -> PRM: new ProduccionModel(numeroSeguimiento)
+activate PRM
+PRM -> PRMR: save(procesoProduccion)
+activate PRMR
+PRMR --> PRM: procesoCreado
+deactivate PRMR
+PRM --> PRC: produccionIniciada
+deactivate PRM
+PRC --> EV: ensambladoIniciado
+deactivate PRC
+EV --> OF: procesoIniciado
+deactivate EV
+
+' === ENSAMBLADO DE COMPONENTES ===
+loop Para cada etapa de ensamblado
+    OF -> EV: registrarEtapa(numeroSeguimiento, etapa)
+    activate EV
+    EV -> PRC: procesarEtapa(numeroSeguimiento, etapa)
+    activate PRC
+    
+    alt Ensamblado de Motor
+        PRC -> COM: obtenerComponentesMotor(tipoMotor)
+        activate COM
+        COM -> COMR: findComponentesByTipo("motor_electrico")
+        activate COMR
+        COMR --> COM: componentesMotor
+        deactivate COMR
+        COM --> PRC: componentesNecesarios
+        deactivate COM
+        
+        PRC -> PRM: registrarComponentes(procesoId, componentesMotor)
+        activate PRM
+        PRM -> PRMR: saveComponentesUtilizados(procesoId, componentes)
+        activate PRMR
+        PRMR --> PRM: componentesRegistrados
+        deactivate PRMR
+        PRM --> PRC: etapaCompletada
+        deactivate PRM
+    else Ensamblado de Transmisión
+        PRC -> COM: obtenerComponentesTransmision(tipoTransmision)
+        activate COM
+        COM -> COMR: findComponentesByTipo("transmision_automatica")
+        activate COMR
+        COMR --> COM: componentesTransmision
+        deactivate COMR
+        COM --> PRC: componentesNecesarios
+        deactivate COM
+        
+        PRC -> PRM: registrarComponentes(procesoId, componentesTransmision)
+        activate PRM
+        PRM -> PRMR: saveComponentesUtilizados(procesoId, componentes)
+        activate PRMR
+        PRMR --> PRM: componentesRegistrados
+        deactivate PRMR
+        PRM --> PRC: etapaCompletada
+        deactivate PRM
+    else Instalación de Accesorios
+        PRC -> COM: obtenerAccesorios(listaAccesorios)
+        activate COM
+        COM -> COMR: findComponentesByTipos(["pantalla_tactil", "camara_retroceso"])
+        activate COMR
+        COMR --> COM: accesoriosDisponibles
+        deactivate COMR
+        COM --> PRC: accesoriosNecesarios
+        deactivate COM
+        
+        PRC -> PRM: registrarComponentes(procesoId, accesorios)
+        activate PRM
+        PRM -> PRMR: saveComponentesUtilizados(procesoId, componentes)
+        activate PRMR
+        PRMR --> PRM: componentesRegistrados
+        deactivate PRMR
+        PRM --> PRC: etapaCompletada
+        deactivate PRM
+    end
+    
+    PRC --> EV: etapaProcesada
+    deactivate PRC
+    EV --> OF: etapaConfirmada
+    deactivate EV
+end
+
+' === VERIFICACIÓN DE CALIDAD ===
+OF -> CLV: iniciarVerificacionCalidad(numeroSeguimiento)
+activate CLV
+CLV -> CC: realizarInspeccion(numeroSeguimiento)
+activate CC
+CC -> CLM: new CalidadModel(numeroSeguimiento)
+activate CLM
+CLM -> CLR: save(inspeccionCalidad)
+activate CLR
+CLR --> CLM: inspeccionCreada
+deactivate CLR
+CLM --> CC: verificacionIniciada
+deactivate CLM
+
+CC -> PRM: obtenerDetallesProduccion(numeroSeguimiento)
+activate PRM
+PRM -> PRMR: findDetallesByNumeroSeguimiento(numeroSeguimiento)
+activate PRMR
+PRMR --> PRM: detallesProduccion
+deactivate PRMR
+PRM --> CC: datosProduccion
+deactivate PRM
+
+CC -> CLM: verificarEspecificaciones(datosProduccion)
+activate CLM
+CLM -> CLR: saveResultadosInspeccion(inspeccionId, resultados)
+activate CLR
+CLR --> CLM: resultadosGuardados
+deactivate CLR
+CLM --> CC: verificacionCompleta
+deactivate CLM
+CC --> CLV: resultadoInspeccion
+deactivate CC
+
+alt Vehículo aprobado
+    CLV --> OF: calidadAprobada
+    OF -> CLV: finalizarProduccion(numeroSeguimiento)
+    activate CLV
+    CLV -> CC: marcarAprobado(numeroSeguimiento)
+    activate CC
+    CC -> CLM: actualizarEstado(numeroSeguimiento, "APROBADO")
+    activate CLM
+    CLM -> CLR: updateEstadoCalidad(numeroSeguimiento, "APROBADO")
+    activate CLR
+    CLR --> CLM: estadoActualizado
+    deactivate CLR
+    CLM --> CC: aprobacionRegistrada
+    deactivate CLM
+    CC --> CLV: aprobacionConfirmada
+    deactivate CC
+    CLV --> OF: vehiculoAprobado
+    deactivate CLV
+else Vehículo rechazado
+    CLV --> OF: calidadRechazada(motivosRechazo)
+    OF -> CLV: registrarDefectos(numeroSeguimiento, defectos)
+    activate CLV
+    CLV -> CC: marcarRechazado(numeroSeguimiento, defectos)
+    activate CC
+    CC -> CLM: actualizarEstado(numeroSeguimiento, "RECHAZADO", defectos)
+    activate CLM
+    CLM -> CLR: updateEstadoCalidad(numeroSeguimiento, "RECHAZADO", defectos)
+    activate CLR
+    CLR --> CLM: estadoActualizado
+    deactivate CLR
+    CLM --> CC: rechazoRegistrado
+    deactivate CLM
+    CC --> CLV: rechazoConfirmado
+    deactivate CC
+    CLV --> OF: vehiculoRechazado
+    deactivate CLV
+    note right: El vehículo debe pasar\npor corrección y nueva inspección
+end
+deactivate CLV
+
+' === GENERACIÓN DE INFORME FINAL ===
+OF -> IV: generarInformeFinal(numeroSeguimiento)
+activate IV
+IV -> IC: crearInformeVehiculo(numeroSeguimiento)
+activate IC
+IC -> VM: obtenerDatosCompletos(numeroSeguimiento)
+activate VM
+VM -> VR: findVehiculoCompleto(numeroSeguimiento)
+activate VR
+VR --> VM: datosVehiculo
+deactivate VR
+VM --> IC: informacionVehiculo
+deactivate VM
+
+IC -> PRM: obtenerHistorialProduccion(numeroSeguimiento)
+activate PRM
+PRM -> PRMR: findHistorialCompleto(numeroSeguimiento)
+activate PRMR
+PRMR --> PRM: historialProduccion
+deactivate PRMR
+PRM --> IC: detallesProduccion
+deactivate PRM
+
+IC -> CLM: obtenerResultadosCalidad(numeroSeguimiento)
+activate CLM
+CLM -> CLR: findResultadosCalidad(numeroSeguimiento)
+activate CLR
+CLR --> CLM: resultadosCalidad
+deactivate CLR
+CLM --> IC: datosCalidad
+deactivate CLM
+
+IC -> COSM: obtenerCostosFinales(numeroSeguimiento)
+activate COSM
+COSM -> COSR: findCostosDetallados(numeroSeguimiento)
+activate COSR
+COSR --> COSM: costosCompletos
+deactivate COSR
+COSM --> IC: datosFinancieros
+deactivate COSM
+
+IC --> IV: informeGenerado
+deactivate IC
+IV --> OF: informeCompleto
+deactivate IV
+
+OF -> Concesionario: Entrega informe del vehículo terminado
+Concesionario --> OF: Recibe documentación completa
+deactivate OF
+
+@enduml

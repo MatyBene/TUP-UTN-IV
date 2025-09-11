@@ -1,0 +1,115 @@
+@startuml Taller_Diagrama_Actividad
+title Diagrama de Actividad - Proceso Completo Taller Mecánico
+
+start
+
+:Cliente trae vehículo al taller;
+:Mecánico recibe vehículo;
+:Sistema busca vehículo por matrícula;
+
+if (¿Vehículo ya registrado?) then (Sí)
+    :Sistema obtiene datos del cliente;
+    :Mecánico consulta historial de reparaciones;
+    :Sistema muestra historial detallado;
+    note right: Incluye fechas, acciones,\npiezas y costos anteriores
+else (No)
+    :Mecánico registra datos del vehículo;
+    :Sistema verifica si cliente existe;
+    if (¿Cliente ya registrado?) then (Sí)
+        :Sistema vincula vehículo a cliente existente;
+    else (No)
+        :Sistema registra nuevo cliente;
+        :Sistema vincula vehículo a nuevo cliente;
+    endif
+endif
+
+:Mecánico registra motivo de ingreso;
+:Sistema crea nueva reparación;
+:Sistema registra kilometraje de entrada;
+
+' === PROCESO DE DIAGNÓSTICO Y REPARACIÓN ===
+:Mecánico realiza diagnóstico;
+
+repeat
+    :Mecánico identifica acción necesaria;
+    :Sistema busca código de acción;
+    if (¿Acción válida?) then (Sí)
+        :Sistema registra acción y tiempo estimado;
+        :Mecánico ejecuta acción;
+        :Sistema actualiza tiempo real empleado;
+    else (No)
+        :Sistema rechaza código de acción;
+        :Mecánico debe corregir código;
+    endif
+repeat while (¿Más acciones necesarias?) is (Sí)
+-> No;
+
+' === GESTIÓN DE PIEZAS ===
+repeat
+    :Mecánico identifica pieza necesaria;
+    :Sistema consulta stock en almacén;
+    if (¿Pieza disponible en stock?) then (Sí)
+        :Sistema reserva pieza;
+        :Mecánico utiliza pieza;
+        :Sistema registra pieza en reparación;
+        :Sistema actualiza stock;
+    else (No)
+        :Sistema solicita pieza al fabricante;
+        :Sistema registra solicitud;
+        :Esperar llegada de pieza del fabricante;
+        note right: Proceso pausado hasta\nrecepción de la pieza
+        :Pieza llega del fabricante;
+        :Sistema actualiza stock;
+        :Sistema reserva pieza;
+        :Mecánico utiliza pieza;
+        :Sistema registra pieza en reparación;
+    endif
+repeat while (¿Más piezas necesarias?) is (Sí)
+-> No;
+
+:Mecánico finaliza todas las reparaciones;
+:Sistema marca reparación como completada;
+:Sistema registra fecha y hora de finalización;
+:Sistema registra kilometraje de salida;
+
+' === FACTURACIÓN ===
+:Sistema calcula costo de mano de obra;
+note right: Horas totales × precio por hora
+:Sistema calcula costo de piezas;
+note right: Suma del precio de todas las piezas
+:Sistema genera factura detallada;
+note right: Incluye: acciones realizadas,\ntiempo empleado, piezas utilizadas,\ncostos individuales y total
+
+:Sistema notifica al cliente;
+:Cliente viene a recoger vehículo;
+
+' === PROCESO DE PAGO ===
+:Mecánico presenta factura al cliente;
+:Cliente revisa factura;
+if (¿Cliente acepta factura?) then (Sí)
+    :Cliente especifica método de pago;
+    :Sistema valida método de pago;
+    if (¿Método válido?) then (Sí)
+        :Sistema procesa pago;
+        if (¿Pago exitoso?) then (Sí)
+            :Sistema registra pago;
+            :Sistema marca factura como pagada;
+            :Sistema autoriza entrega del vehículo;
+            :Mecánico entrega vehículo al cliente;
+            :Cliente recibe vehículo y factura;
+            stop
+        else (No)
+            :Sistema informa error en pago;
+            :Cliente debe intentar otro método;
+        endif
+    else (No)
+        :Sistema rechaza método de pago;
+        :Mecánico solicita método válido;
+    endif
+else (No)
+    :Cliente solicita revisión de factura;
+    :Mecánico revisa detalles con cliente;
+    note right: Puede requerir ajustes\no aclaraciones
+endif
+
+@enduml

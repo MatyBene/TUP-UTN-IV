@@ -1,0 +1,243 @@
+@startuml Cafeteria_Diagrama_Secuencia_MVC
+title Diagrama de Secuencia MVC - Sistema de Pedidos Cafetería Latte&Code
+
+actor Cliente
+participant "Empleado" as E
+
+' === CAPA VISTA ===
+participant "PedidoView" as PV
+participant "TicketView" as TV
+
+' === CAPA CONTROLADOR ===
+participant "PedidoController" as PC
+participant "PagoController" as PAC
+
+' === CAPA MODELO ===
+participant "PedidoModel" as PM
+participant "ProductoModel" as PRM
+participant "CuponModel" as CM
+participant "PagoModel" as PAM
+participant "SucursalModel" as SM
+
+' === CAPA REPOSITORY ===
+participant "PedidoRepository" as PR
+participant "ProductoRepository" as PROR
+participant "CuponRepository" as CR
+participant "PagoRepository" as PAR
+participant "SucursalRepository" as SR
+
+Cliente -> E: Solicita hacer pedido
+activate E
+E -> PV: iniciarInterfazPedido()
+activate PV
+
+PV -> PC: crearNuevoPedido(sucursalId)
+activate PC
+PC -> PM: new PedidoModel(sucursalId)
+activate PM
+PM -> SM: obtenerInfoSucursal(sucursalId)
+activate SM
+SM -> SR: findById(sucursalId)
+activate SR
+SR --> SM: sucursalEntity
+deactivate SR
+SM --> PM: datosSucursal
+deactivate SM
+PM -> PR: save(pedido)
+activate PR
+PR --> PM: pedidoGuardado
+deactivate PR
+PM --> PC: pedidoCreado
+deactivate PM
+PC --> PV: confirmacionCreacion
+deactivate PC
+PV --> E: interfazLista
+deactivate PV
+
+loop Para cada producto solicitado
+    E -> Cliente: ¿Qué producto desea?
+    activate E
+    Cliente --> E: Especifica producto
+    E -> PV: agregarProducto(codigoProducto, cantidad)
+    activate PV
+    PV -> PC: validarYAgregarProducto(codigoProducto, cantidad)
+    activate PC
+    PC -> PRM: buscarProducto(codigoProducto)
+    activate PRM
+    PRM -> PROR: findByCodigo(codigoProducto)
+    activate PROR
+    PROR --> PRM: productoEntity
+    deactivate PROR
+    PRM --> PC: producto
+    deactivate PRM
+    
+    alt Producto encontrado
+        PC -> PM: agregarItem(producto, cantidad)
+        activate PM
+        PM -> PR: updatePedido(pedidoId, items)
+        activate PR
+        PR --> PM: itemAgregado
+        deactivate PR
+        PM --> PC: itemAgregado
+        deactivate PM
+        PC --> PV: productoAgregadoExito
+        PV --> E: confirmaciónVisual
+    else Producto no encontrado
+        PC --> PV: errorProductoNoEncontrado
+        PV --> E: mensajeError
+    end
+    deactivate PC
+    deactivate PV
+    deactivate E
+end
+
+E -> Cliente: ¿Tiene cupón de descuento?
+activate E
+Cliente --> E: Entrega cupón (opcional)
+
+E -> PV: procesarPedido(cuponCodigo?)
+activate PV
+PV -> PC: calcularTotalPedido(cuponCodigo?)
+activate PC
+
+' Cálculo del total base
+PC -> PM: obtenerItems()
+activate PM
+PM -> PR: findItemsByPedidoId(pedidoId)
+activate PR
+PR --> PM: listaItems
+deactivate PR
+PM --> PC: listaItems
+deactivate PM
+
+PC -> SM: obtenerPreciosProductos(listaItems, sucursalId)
+activate SM
+loop Para cada item
+    SM -> PRM: getPrecioEnSucursal(productoId, sucursalId)
+    activate PRM
+    PRM -> PROR: findPrecioBySucursal(productoId, sucursalId)
+    activate PROR
+    PROR --> PRM: precio
+    deactivate PROR
+    PRM --> SM: precio
+    deactivate PRM
+end
+SM --> PC: preciosTotales
+deactivate SM
+
+' Procesamiento del cupón
+alt Si hay cupón
+    PC -> CM: validarCupon(cuponCodigo, pedido)
+    activate CM
+    CM -> CR: findByCodigo(cuponCodigo)
+    activate CR
+    CR --> CM: cuponEntity
+    deactivate CR
+    CM --> PC: cuponValidez
+    deactivate CM
+    
+    alt Cupón válido
+        PC -> CM: calcularDescuento(cuponCodigo, totalBase)
+        activate CM
+        CM -> CR: findDescuentoByCodigo(cuponCodigo)
+        activate CR
+        CR --> CM: porcentajeDescuento
+        deactivate CR
+        CM --> PC: montoDescuento
+        deactivate CM
+        PC -> PM: aplicarDescuento(montoDescuento)
+        activate PM
+        PM -> PR: updateDescuento(pedidoId, descuento)
+        activate PR
+        PR --> PM: descuentoGuardado
+        deactivate PR
+        PM --> PC: descuentoAplicado
+        deactivate PM
+    else Cupón inválido
+        PC --> PV: errorCuponInvalido
+        PV --> E: mostrarErrorCupon
+    end
+end
+
+PC -> PM: calcularTotalFinal()
+activate PM
+PM -> PR: updateTotal(pedidoId, totalFinal)
+activate PR
+PR --> PM: totalActualizado
+deactivate PR
+PM --> PC: totalFinal
+deactivate PM
+PC --> PV: totalCalculado
+deactivate PC
+PV --> E: mostrarTotal(totalFinal)
+deactivate PV
+deactivate E
+
+E -> Cliente: Informa total a pagar
+activate E
+Cliente -> E: Especifica método de pago
+
+E -> PV: procesarPago(metodoPago, monto)
+activate PV
+PV -> PAC: iniciarPago(metodoPago, monto)
+activate PAC
+PAC -> PAM: validarMetodoPago(metodoPago)
+activate PAM
+PAM -> PAR: findMetodoPago(metodoPago)
+activate PAR
+PAR --> PAM: metodoPagoEntity
+deactivate PAR
+PAM --> PAC: metodoPagoValido
+deactivate PAM
+
+alt Método de pago válido
+    PAC -> PAM: procesarPago(metodoPago, monto, pedidoId)
+    activate PAM
+    PAM -> PAR: save(transaccion)
+    activate PAR
+    PAR --> PAM: transaccionGuardada
+    deactivate PAR
+    PAM --> PAC: resultadoPago
+    deactivate PAM
+    
+    alt Pago exitoso
+        PAC -> PM: marcarComoPagado(pedidoId)
+        activate PM
+        PM -> PR: updateEstadoPago(pedidoId, "PAGADO")
+        activate PR
+        PR --> PM: estadoActualizado
+        deactivate PR
+        PM --> PAC: pagoRegistrado
+        deactivate PM
+        
+        PAC -> TV: generarTicket(pedidoId)
+        activate TV
+        TV -> PM: obtenerDetallesPedido(pedidoId)
+        activate PM
+        PM -> PR: findFullDetailsByPedidoId(pedidoId)
+        activate PR
+        PR --> PM: detallesCompletos
+        deactivate PR
+        PM --> TV: detallesCompletos
+        deactivate PM
+        TV --> PAC: ticketGenerado
+        deactivate TV
+        
+        PAC --> PV: pagoExitoso(ticket)
+        PV --> E: mostrarTicket(ticket)
+    else Pago fallido
+        PAC --> PV: errorPago
+        PV --> E: mostrarErrorPago
+    end
+else Método de pago inválido
+    PAC --> PV: errorMetodoPago
+    PV --> E: mostrarErrorMetodo
+end
+deactivate PAC
+deactivate PV
+
+E -> Cliente: Entrega ticket
+Cliente --> E: Recibe ticket
+deactivate E
+
+@enduml

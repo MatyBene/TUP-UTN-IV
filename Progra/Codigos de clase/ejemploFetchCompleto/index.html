@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>CRUD con fetch</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Ejemplo 1 -->
+  <!-- <h1>Operaciones con JSONPlaceholder</h1>
+
+  <button onclick="getPost()">🟢 GET</button>
+  <button onclick="crearPost()">🟡 POST</button>
+  <button onclick="actualizarPost()">🔵 PUT</button>
+  <button onclick="borrarPost()">🔴 DELETE</button>
+
+  <p id="resultado"></p> -->
+
+  <!-- Ejemplo 2 -->
+<div class="container">
+  <h2>Ver un post</h2>
+  <input type="number" id="idPost" placeholder="ID del post">
+  <button id="btnGet">Obtener</button>
+  <p id="resultadoGet"></p>
+
+  <h2>Crear un nuevo post</h2>
+  <input type="text" id="postTitulo" placeholder="Título">
+  <input type="text" id="postContenido" placeholder="Contenido">
+  <button id="btnPost">Crear</button>
+  <p id="resultadoPost"></p>
+
+  <h2>Modificar un post</h2>
+  <input type="number" id="putId" placeholder="ID del post">
+  <input type="text" id="putTitulo" placeholder="Nuevo título">
+  <input type="text" id="putContenido" placeholder="Nuevo contenido">
+  <button id="btnPut">Modificar</button>
+  <p id="resultadoPut"></p>
+
+  <h2>Eliminar un post</h2>
+  <input type="number" id="idAEliminar" placeholder="ID del post">
+  <button id="btnDelete">Eliminar</button>
+  <p id="resultadoDelete"></p>
+</div>
+
+  <script src="script.js"></script>
+
+</body>
+</html>

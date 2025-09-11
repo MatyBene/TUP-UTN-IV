@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Ver un post</h2>
+        <input type="number" id="idPost" placeholder="ID del post">
+        <button id="btnGet">Obtener</button>
+        <p id="resultadoGet"></p>
+
+        <ul id="listaExt"></ul>
+
+        <form id="extForm">
+            <h2>Crear un nuevo post</h2>
+            <input type="text" id="postNombre" placeholder="Nombre" required>
+            <input type="text" id="postPlaneta" placeholder="Planeta" required>
+            <input type="number" id="postPoder" placeholder="Nivel de poder" required>
+            <button id="btnPost" type="submit">Crear</button>
+        </form>
+
+        <h2>Modificar un post</h2>
+        <input type="number" id="putId" placeholder="ID del post">
+        <input type="text" id="putTitulo" placeholder="Nuevo título">
+        <input type="text" id="putContenido" placeholder="Nuevo contenido">
+        <button id="btnPut">Modificar</button>
+        <p id="resultadoPut"></p>
+
+        <h2>Eliminar un post</h2>
+        <input type="number" id="idAEliminar" placeholder="ID del post">
+        <button id="btnDelete">Eliminar</button>
+        <p id="resultadoDelete"></p>
+    </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
