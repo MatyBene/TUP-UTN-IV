@@ -1,0 +1,28 @@
+{
+  "extraterrestres": [
+    {
+      "id": "1",
+      "nombre": "Zorglum",
+      "planeta": "Nebulon-5",
+      "nivelPoder": 87
+    },
+    {
+      "nombre": "Xelara",
+      "planeta": "Andrómeda-X",
+      "nivelPoder": 95,
+      "id": "2"
+    },
+    {
+      "id": "3",
+      "nombre": "Bloop",
+      "planeta": "Saturno",
+      "nivelPoder": 42
+    },
+    {
+      "id": "4",
+      "nombre": "Lionel Messi",
+      "planeta": "Tierra",
+      "nivelPoder": 1000
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+.cardExt {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2%;
+}
+
+.btnEditar {
+    background-color: yellow;
+    margin-left: 2%;
+}
+
+.btnEliminar {
+    background-color: red;
+    margin-left: 2%;
+}

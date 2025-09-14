@@ -1,0 +1,122 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: grid;
+    grid-template-columns: 1fr 33%;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas: 
+        "header header" 
+        "main aside" 
+        "footer footer";
+    min-height: 100vh;
+    background-color: #f0f0f0;
+}
+
+/* Header */
+.header-container {
+    grid-area: header;
+    background-color: lightblue;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-container h1 {
+    color: #333;
+}
+
+nav button {
+    background-color: white;
+    border: 2px solid #333;
+    padding: 10px 15px;
+    margin-left: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+nav button:hover {
+    background-color: #333;
+    color: white;
+}
+
+/* Aside */
+.aside-container {
+    grid-area: aside;
+    padding: 20px;
+    background-color: white;
+}
+
+/* Main - Contenedor de cartas */
+.main-container {
+    grid-area: main;
+    background-color: greenyellow;
+    padding: 20px;
+}
+
+.main-container h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.dioses-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+/* Estilos básicos para las cartas */
+.dios-card {
+    background-color: white;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    width: 100%;
+    max-width: 250px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.dios-card h4 {
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.dios-card p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Clases para los niveles de poder */
+.supremo {
+    border-color: gold;
+    background-color: #fff9c4;
+}
+
+.poderoso {
+    border-color: red;
+    background-color: #ffe6e6;
+}
+
+.legendario {
+    border-color: purple;
+    background-color: #f0e6ff;
+}
+
+/* Footer */
+.footer-container {
+    grid-area: footer;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 15px;
+}

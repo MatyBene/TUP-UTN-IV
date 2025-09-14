@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Extraterrestres</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Sistema de Gestión de Extraterrestres</h1>
+        <nav>
+            <button id="listaCompleta">Lista completa</button>
+            <button id="listaPlanetas">Lista con planetas</button>
+            <button id="listaPoder">Lista con nivel de poder</button>
+            <button id="btnAgregar">Agregar</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Sección para mostrar la lista de extraterrestres -->
+        <section id="lista" class="section-lista">
+            <h2>Lista de Extraterrestres</h2>
+            <div id="extraterrestres-container">
+                <!-- Los extraterrestres se cargarán aquí dinámicamente -->
+            </div>
+        </section>
+
+        <!-- Formulario unificado para agregar/editar extraterrestre -->
+        <section id="formulario" class="section-form" style="display: none;">
+            <h2 id="titulo-formulario">Agregar Nuevo Extraterrestre</h2>
+            <form id="form-extraterrestre" class="extraterrestre-form">
+                <fieldset>
+                    <legend id="legend-formulario">Datos del Extraterrestre</legend>
+                    
+                    <input type="hidden" id="extraterrestre-id" name="id">
+                    
+                    <div class="input-group">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre" required placeholder="Nombre del extraterrestre">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="planeta">Planeta de Origen:</label>
+                        <input type="text" id="planeta" required placeholder="Planeta de origen">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="poder">Nivel de Poder:</label>
+                        <input type="number" id="poder" required placeholder="Nivel de poder">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" id="btn-submit" class="btn btn-primary">Agregar</button>
+                        <button type="button" id="btn-cancelar" class="btn btn-secondary">Cancelar</button>
+                    </div>
+                </fieldset>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Sistema de Gestión de Extraterrestres - TUP UTN</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

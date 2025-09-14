@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Dioses Griegos</title>
+</head>
+<body>
+    <header class="header-container">
+        <h1>Dioses Griegos</h1>
+        <nav>
+            <button id="btn-listado-completo">Listado completo</button>
+            <button id="btn-nombre-dominio">Listado por nombre y dominio</button>
+            <button id="btn-agregar">Agregar</button>
+        </nav>
+    </header>
+
+    <main class="main-container">
+        <h3>Dioses</h3>
+        <div id="dioses-container" class="dioses-container">
+            <!-- Las cartas de dioses se mostrarán aquí -->
+        </div>
+    </main>
+
+    <aside class="aside-container">
+        <section id="agregar" class="section-form" style="display: none;">
+            <h2>Agregar Nuevo Extraterrestre</h2>
+            <form id="form-agregar" class="extraterrestre-form">
+                <fieldset>
+                    <legend>Datos del Extraterrestre</legend>
+                    
+                    <div class="input-group">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre"required placeholder="Nombre del extraterrestre">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="planeta">Planeta de Origen:</label>
+                        <input type="text" id="planeta" required placeholder="Planeta de origen">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="nivel-poder">Nivel de Poder:</label>
+                        <input type="number" id="poder" required placeholder="Nivel de poder">
+                    </div>
+
+                    <button type="button" onclick="agregarExt(event)">Agregar</button>
+                </fieldset>
+            </form>
+        </section>
+    </aside>
+
+    <footer class="footer-container">
+        <p>Simulacro 1 Parcial - 2</p>
+        <p>2025</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

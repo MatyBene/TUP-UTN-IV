@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación de Análisis de Datos</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        #quiz-container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            background-color: #ecf0f1;
+            border-radius: 4px;
+        }
+        .question p {
+            font-weight: bold;
+            margin: 0 0 10px 0;
+        }
+        .options div {
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        label {
+            margin-left: 8px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #results {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .correct {
+            color: #27ae60;
+        }
+        .incorrect {
+            color: #c0392b;
+        }
+        .feedback {
+            font-size: 0.9em;
+            font-style: italic;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .feedback.correct {
+            background-color: #e8f8f5;
+            border-left: 3px solid #27ae60;
+        }
+        .feedback.incorrect {
+            background-color: #fdedec;
+            border-left: 3px solid #c0392b;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="quiz-container">
+        <h1>Evaluación de Análisis de Datos</h1>
+        <form id="quiz-form">
+            <!-- Las preguntas se insertarán aquí dinámicamente -->
+        </form>
+        <button id="submit-btn" style="display: none;">Corregir Examen</button>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const allQuestions = [
+            // 02-dato.md (8 preguntas)
+            {
+                question: "Verdadero o Falso: Un dato por sí solo tiene sentido semántico y transmite un mensaje completo.",
+                options: ["Verdadero", "Falso"],
+                answer: "Falso",
+                explanation: "Un dato es una representación simbólica sin sentido semántico por sí solo. La información es el conjunto de datos procesados que transmite un mensaje."
+            },
+            {
+                question: "¿Cuál de las siguientes NO es una de las seis dimensiones de la calidad del dato?",
+                options: ["Completitud", "Unicidad", "Velocidad", "Precisión"],
+                answer: "Velocidad",
+                explanation: "Las seis dimensiones son: Completitud, Unicidad, Integridad, Precisión, Coherencia y Conformidad."
+            },
+            {
+                question: "La medida en que todos los valores distintos de un elemento de datos aparecen solo una vez se refiere a:",
+                options: ["Completitud", "Unicidad", "Integridad", "Coherencia"],
+                answer: "Unicidad",
+                explanation: "La Unicidad se asegura de que no haya duplicados para un elemento de dato."
+            },
+            {
+                question: "Verdadero o Falso: La 'Conformidad' de los datos se refiere a que los datos representan correctamente la verdad sobre un objeto del mundo real.",
+                options: ["Verdadero", "Falso"],
+                answer: "Falso",
+                explanation: "Eso describe la 'Precisión'. La 'Conformidad' se refiere a que los datos están en un formato estándar y legible."
+            },
+            {
+                question: "El grado en que todos los atributos del dato están presentes (no hay valores nulos o vacíos) se refiere a:",
+                options: ["Precisión", "Integridad", "Completitud", "Coherencia"],
+                answer: "Completitud",
+                explanation: "La Completitud mide si los datos están completos, sin omisiones."
+            },
+            {
+                question: "Verdadero o Falso: La información se refiere a datos sin procesar.",
+                options: ["Verdadero", "Falso"],
+                answer: "Falso",
+                explanation: "La información es el resultado de procesar y organizar los datos para darles un significado y contexto."
+            },
+            {
+                question: "El grado de conformidad con las reglas de relación de datos definidas (ej: una clave foránea que apunta a un registro existente) es la:",
+                options: ["Precisión", "Integridad", "Conformidad", "Unicidad"],
+                answer: "Integridad",
+                explanation: "La Integridad (específicamente la integridad referencial) asegura que las relaciones entre los datos sean válidas."
+            },
+            {
+                question: "Si el cumpleaños de una persona aparece como '01/01/1990' en un sistema y '1 de Enero de 1990' en otro, ¿qué dimensión de calidad del dato está fallando principalmente?",
+                options: ["Precisión", "Coherencia", "Completitud", "Conformidad"],
+                answer: "Conformidad",
+                explanation: "La Conformidad se refiere a que los datos sigan un formato estándar. La Coherencia sería si los valores fueran diferentes (ej: 1990 vs 1991)."
+            },
+            // 03-dataAnalyticsJourney.md (8 preguntas)
+            {
+                question: "¿Cuál es el primer paso en el proceso de Data Analytics Journey?",
+                options: ["Implementación técnica", "Análisis de información", "Inmersión", "Estrategia de medición"],
+                answer: "Inmersión",
+                explanation: "El proceso comienza con la Inmersión para entender el modelo de negocio, el problema y el contexto."
+            },
+            {
+                question: "La representación gráfica de información y datos que facilita su comprensión se conoce como:",
+                options: ["Data Modeling", "Data Manipulation", "Data Visualization", "Data Strategy"],
+                answer: "Data Visualization",
+                explanation: "Data Visualization es clave en la fase de Implementación Técnica para hacer los datos comprensibles."
+            },
+            {
+                question: "Verdadero o Falso: La fase de 'Inmersión' incluye la definición de KPIs y OKRs.",
+                options: ["Verdadero", "Falso"],
+                answer: "Falso",
+                explanation: "La definición de KPIs y OKRs corresponde a la fase de 'Estrategia de medición'."
+            },
+            {
+                question: "El proceso iterativo de la 'Implementación técnica' consiste en tres fases. ¿Cuál de las siguientes NO es una de ellas?",
+                options: ["Data Modeling", "Data Manipulation", "Data Visualization", "Data Generation"],
+                answer: "Data Generation",
+                explanation: "Las tres fases son Data Modeling, Data Manipulation y Data Visualization."
+            },
+            {
+                question: "En la fase de 'Análisis de información', se exploran los datos para generar:",
+                options: ["Modelos de datos", "Dimensiones", "Insights y Findings", "Procesos ETL"],
+                answer: "Insights y Findings",
+                explanation: "Esta fase se centra en descubrir hallazgos (findings) y conocimientos (insights) a partir de los datos ya procesados."
+            },
+            {
+                question: "Verdadero o Falso: El 'Data Modeling' es una técnica para limpiar y transformar datos.",
+                options: ["Verdadero", "Falso"],
+                answer: "Falso",
+                explanation: "Eso es 'Data Manipulation'. El 'Data Modeling' se enfoca en construir modelos para estructurar y facilitar el acceso a los datos."
+            },
+            {
+                question: "La fase final del Data Analytics Journey, donde se corroboran o desechan hipótesis, es:",
+                options: ["Implementación técnica", "Generación de conocimiento", "Estrategia de medición", "Inmersión"],
+                answer: "Generación de conocimiento",
+                explanation: "En esta etapa, los insights se convierten en conocimiento fáctico que sirve para ajustar estrategias y tomar decisiones."
+            },
+            {
+                question: "Entender el modelo de negocio es un paso crucial de la fase de:",
+                options: ["Análisis de información", "Implementación técnica", "Inmersión", "Generación de conocimiento"],
+                answer: "Inmersión",
+                explanation: "La Inmersión implica conocer el problema, entender el negocio y comprender el modelo de datos."
+            },
+            // 04-kpiYOkr.md (9 preguntas)
+            {
+                question: "¿Qué significa KPI?",
+                options: ["Key Process Indicator", "Key Performance Indicator", "Key Progress Information", "Known Performance Issue"],
+                answer: "Key Performance Indicator",
+                explanation: "KPI son las siglas de Key Performance Indicator (Indicador Clave de Actuación)."
+            },
+            {
+                question: "Verdadero o Falso: Los OKRs se componen de Objetivos y Resultados Clave (Key Results), y se recomienda tener de 8 a 10 KR por objetivo.",
+                options: ["Verdadero", "Falso"],
+                answer: "Falso",
+                explanation: "Se recomienda tener de 3 a 4 Resultados Clave (KR) por objetivo para mantener el enfoque."
+            },
+            {
+                question: "Una característica de un buen KPI es que debe ser:",
+                options: ["General", "Cualitativo", "Abstracto", "Temporal"],
+                answer: "Temporal",
+                explanation: "Un KPI debe poder medirse en el tiempo, además de ser medible, cuantificable, específico y verificable."
+            },
+            {
+                question: "Según la metodología OKR, los objetivos (la 'O') deben ser:",
+                options: ["Fáciles de alcanzar", "Inspiradores", "Definidos anualmente", "Secretos para el equipo"],
+                answer: "Inspiradores",
+                explanation: "Los objetivos deben ser inspiradores, accionables y limitados en el tiempo (generalmente trimestrales)."
+            },
+            {
+                question: "Verdadero o Falso: Los KPIs y los OKRs son metodologías completamente opuestas y no pueden coexistir en una organización.",
+                options: ["Verdadero", "Falso"],
+                answer: "Falso",
+                explanation: "Pueden coexistir. Los KPIs pueden usarse para medir los Resultados Clave (KR) de un OKR."
+            },
+            {
+                question: "La pregunta '¿Qué queremos medir?' es el primer paso para:",
+                options: ["Definir un OKR", "Definir un KPI", "Realizar un ETL", "Modelar datos"],
+                answer: "Definir un KPI",
+                explanation: "Es la primera de las seis preguntas guía para establecer los indicadores de gestión correctos."
+            },
+            {
+                question: "Verdadero o Falso: Los OKRs deben ser revisados idealmente cada semana.",
+                options: ["Verdadero", "Falso"],
+                answer: "Verdadero",
+                explanation: "La revisión semanal asegura que el trabajo realizado impulsa el cumplimiento de los objetivos."
+            },
+            {
+                question: "La principal diferencia entre un Objetivo (O) y un Resultado Clave (KR) es que:",
+                options: ["El Objetivo es cualitativo y el KR es cuantitativo", "El Objetivo es a largo plazo y el KR a corto plazo", "El Objetivo es individual y el KR es de equipo", "No hay diferencia, son sinónimos"],
+                answer: "El Objetivo es cualitativo y el KR es cuantitativo",
+                explanation: "El Objetivo es la meta inspiradora (¿A dónde voy?), mientras que los KR son las métricas medibles que indican si llegaste."
+            },
+            {
+                question: "La ventaja de los OKRs que ayuda a conectar a los colaboradores con los objetivos estratégicos se describe como:",
+                options: ["Visión", "Priorización", "Comunicación", "Temporalidad"],
+                answer: "Comunicación",
+                explanation: "Los OKRs mejoran la comunicación y alinean a todos en la misma dirección."
+            },
+            // 05-tiposDeDatos.md (9 preguntas)
+            {
+                question: "Los datos almacenados en tablas con filas y columnas en una base de datos relacional son un ejemplo de:",
+                options: ["Datos no estructurados", "Datos semi estructurados", "Datos estructurados", "Datos complejos"],
+                answer: "Datos estructurados",
+                explanation: "Los datos estructurados tienen una organización rígida en tablas con un esquema predefinido."
+            },
+            {
+                question: "Un archivo JSON o XML es un ejemplo típico de:",
+                options: ["Datos estructurados", "Datos semi estructurados", "Datos no estructurados", "Datos binarios"],
+                answer: "Datos semi estructurados",
+                explanation: "Los datos semi estructurados tienen una organización parcial con etiquetas o formatos flexibles como JSON o XML."
+            },
+            {
+                question: "Verdadero o Falso: Los datos no estructurados son fáciles de consultar y analizar con lenguajes como SQL.",
+                options: ["Verdadero", "Falso"],
+                answer: "Falso",
+                explanation: "SQL está diseñado para datos estructurados. Los datos no estructurados (imágenes, videos, texto libre) son difíciles de analizar sin herramientas especializadas."
+            },
+            {
+                question: "¿Cuál es una de las principales desventajas de los datos estructurados?",
+                options: ["Flexibilidad", "Rigidez en la estructura", "Incompatibilidad con sistemas modernos", "Captura de información rica en detalles"],
+                answer: "Rigidez en la estructura",
+                explanation: "Su rigidez hace que sean poco adaptables a cambios y se limiten a tipos de datos predefinidos."
+            },
+            {
+                question: "Los Data Lakes son más adecuados para almacenar:",
+                options: ["Únicamente datos estructurados", "Datos estructurados y semi estructurados", "Todo tipo de datos (estructurados, semi y no estructurados)", "Únicamente datos no estructurados"],
+                answer: "Todo tipo de datos (estructurados, semi y no estructurados)",
+                explanation: "Los Data Lakes están diseñados para almacenar grandes volúmenes de datos en su formato nativo, sin importar su estructura."
+            },
+            {
+                question: "Un video, una foto o un archivo de audio son ejemplos de:",
+                options: ["Datos estructurados", "Datos semi estructurados", "Datos no estructurados", "Datos relacionales"],
+                answer: "Datos no estructurados",
+                explanation: "Estos tipos de datos no poseen una estructura interna predefinida y clara."
+            },
+            {
+                question: "Verdadero o Falso: Los datos semi-estructurados se mantienen en un Sistema de Administración de Base de Datos relacional.",
+                options: ["Verdadero", "Falso"],
+                answer: "Falso",
+                explanation: "Generalmente no se mantienen en bases de datos relacionales, sino en Data Lakes o bases de datos NoSQL."
+            },
+            {
+                question: "El proceso de construir estructuras que permitan almacenar y recuperar datos, a menudo usando un MER (Modelo Entidad-Relación), se llama:",
+                options: ["Persistencia", "Modelado de datos", "Data Lake", "Datos no estructurados"],
+                answer: "Modelado de datos",
+                explanation: "El modelado de datos es la disciplina que se encarga de diseñar estas estructuras."
+            },
+            {
+                question: "Una ventaja de los datos no estructurados es que:",
+                options: ["Son fáciles de consultar", "Tienen bajo costo de almacenamiento", "Capturan información rica y detallada", "Tienen alto rendimiento en consultas"],
+                answer: "Capturan información rica y detallada",
+                explanation: "Permiten analizar información compleja que no cabría en un modelo estructurado, como opiniones en texto libre o contenido de imágenes."
+            },
+            // 06-procesoEtl.md (9 preguntas)
+            {
+                question: "¿Qué significa ETL?",
+                options: ["Extract, Transform, Load", "Execute, Test, Launch", "Extract, Test, Load", "Execute, Transform, Link"],
+                answer: "Extract, Transform, Load",
+                explanation: "ETL son las siglas de Extract (Extraer), Transform (Transformar) y Load (Cargar)."
+            },
+            {
+                question: "¿En qué fase del proceso ETL se realiza la limpieza, estandarización y remoción de duplicados?",
+                options: ["Extracción", "Transformación", "Carga", "Validación"],
+                answer: "Transformación",
+                explanation: "La fase de Transformación es donde se aplican las reglas de negocio para limpiar y estandarizar los datos."
+            },
+            {
+                question: "Verdadero o Falso: La 'Actualización incremental' en la fase de extracción consiste en extraer siempre todos los datos de la fuente.",
+                options: ["Verdadero", "Falso"],
+                answer: "Falso",
+                explanation: "Eso es una 'Extracción por lote/total'. La actualización incremental compara y extrae solo los datos nuevos o modificados."
+            },
+            {
+                question: "La carga de grandes volúmenes de datos procesados por ETL se realiza típicamente en:",
+                options: ["Un archivo de texto", "El repositorio de la herramienta de visualización", "Un Data Warehouse o un Data Lake", "Directamente en un reporte"],
+                answer: "Un Data Warehouse o un Data Lake",
+                explanation: "Para grandes volúmenes, los destinos más comunes y eficientes son los Data Warehouses o Data Lakes."
+            },
+            {
+                question: "Cuando el sistema de origen notifica automáticamente las modificaciones para que sean extraídas, se habla de una extracción de tipo:",
+                options: ["Por lote", "Incremental", "Automática", "Continua"],
+                answer: "Automática",
+                explanation: "La actualización automática (Push, Webhook) ocurre cuando el sistema fuente avisa de los cambios."
+            },
+            {
+                question: "Verdadero o Falso: La fase de 'Carga' es la que tiene el mayor peso y complejidad en el proceso ETL.",
+                options: ["Verdadero", "Falso"],
+                answer: "Falso",
+                explanation: "Debido al gran número de fases (limpieza, estandarización, etc.), el mayor peso del proceso ETL recae en la 'Transformación'."
+            },
+            {
+                question: "Unir dos tablas o dividir una tabla en varias son ejemplos de transformaciones:",
+                options: ["Básicas", "Avanzadas", "De carga", "De extracción"],
+                answer: "Avanzadas",
+                explanation: "Estas operaciones, junto con enriquecimiento de datos o conversión de unidades, se consideran transformaciones avanzadas."
+            },
+            {
+                question: "El streaming de datos es un tipo de extracción:",
+                options: ["Por lote", "Incremental", "Automática", "Continua"],
+                answer: "Continua",
+                explanation: "En la extracción continua o streaming, los nuevos datos se envían constantemente."
+            },
+            {
+                question: "Verdadero o Falso: Los conjuntos chicos de datos nunca se pueden cargar directamente en el repositorio de una herramienta de Data Analytics.",
+                options: ["Verdadero", "Falso"],
+                answer: "Falso",
+                explanation: "Para conjuntos chicos de datos, es una práctica común cargarlos directamente en el repositorio de la herramienta de visualización."
+            },
+            // 07-datawarehouseDatalake.md (8 preguntas)
+            {
+                question: "Un Data Warehouse está principalmente optimizado para:",
+                options: ["Escritura de datos y transacciones", "Lectura de datos y consultas analíticas", "Almacenamiento de datos no estructurados", "Procesos en tiempo real"],
+                answer: "Lectura de datos y consultas analíticas",
+                explanation: "A diferencia de los sistemas transaccionales que priorizan la escritura, un Data Warehouse prioriza la lectura para agilizar las consultas y el reporting."
+            },
+            {
+                question: "Verdadero o Falso: Un Data Lake solo puede almacenar datos estructurados.",
+                options: ["Verdadero", "Falso"],
+                answer: "Falso",
+                explanation: "Una ventaja clave del Data Lake es su capacidad para almacenar los tres tipos de datos: estructurados, semi-estructurados y no estructurados."
+            },
+            {
+                question: "¿Cuál de las siguientes es una característica de un Data Warehouse?",
+                options: ["Almacena datos en su formato nativo", "Esquema flexible o inexistente", "Consolida datos de muchas fuentes en un formato unificado", "Prioriza la agilidad sobre la consistencia"],
+                answer: "Consolida datos de muchas fuentes en un formato unificado",
+                explanation: "Un objetivo principal del Data Warehouse es integrar y unificar datos de diversas fuentes para ofrecer una visión completa y consistente."
+            },
+            {
+                question: "En una arquitectura moderna de datos, es común encontrar que:",
+                options: ["El Data Lake ha reemplazado completamente al Data Warehouse", "El Data Warehouse ha reemplazado completamente al Data Lake", "El Data Lake y el Data Warehouse se integran y combinan sus ventajas", "Se elige uno de los dos, nunca se usan juntos"],
+                answer: "El Data Lake y el Data Warehouse se integran y combinan sus ventajas",
+                explanation: "Ambos componentes son clave. El Data Lake para la ingesta masiva y flexible, y el Data Warehouse para el acceso rápido y seguro a datos estructurados relevantes."
+            },
+            {
+                question: "Verdadero o Falso: El modelo de datos de un Data Warehouse está orientado a ser eficiente en la gestión de transacciones.",
+                options: ["Verdadero", "Falso"],
+                answer: "Falso",
+                explanation: "Esa es la orientación de un sistema transaccional. El modelo de un Data Warehouse está focalizado en integrar, unificar y facilitar el acceso a los datos para el análisis."
+            },
+            {
+                question: "Un sistema transaccional (como un CRM o ERP) prioriza la:",
+                options: ["Lectura de datos", "Escritura de datos", "Visualización de datos", "Exploración de datos"],
+                answer: "Escritura de datos",
+                explanation: "Los sistemas transaccionales deben garantizar el registro rápido y eficiente de las operaciones diarias (transacciones)."
+            },
+            {
+                question: "Verdadero o Falso: Un Data Lake requiere que los datos sean transformados y estructurados antes de ser almacenados.",
+                options: ["Verdadero", "Falso"],
+                answer: "Falso",
+                explanation: "El Data Lake almacena los datos en su formato crudo o nativo. La transformación suele ocurrir después, cuando se van a utilizar (Schema-on-Read)."
+            },
+            {
+                question: "El componente que extrae, transforma y carga datos desde las fuentes hasta el Data Warehouse se llama:",
+                options: ["Herramienta de visualización", "Proceso ETL", "Sistema transaccional", "Data Lake"],
+                answer: "Proceso ETL",
+                explanation: "El proceso ETL es el puente esencial entre las fuentes de datos y el Data Warehouse."
+            },
+            // 09-exploracionDeDatos.md (8 preguntas)
+            {
+                question: "El Análisis Exploratorio de Datos también es conocido como:",
+                options: ["EDA", "ETL", "API", "DBA"],
+                answer: "EDA",
+                explanation: "EDA son las siglas de Exploratory Data Analysis."
+            },
+            {
+                question: "El valor que más se repite en un conjunto de datos se llama:",
+                options: ["Promedio", "Mediana", "Moda", "Percentil"],
+                answer: "Moda",
+                explanation: "La moda es el valor con la frecuencia más alta."
+            },
+            {
+                question: "Verdadero o Falso: La mediana es siempre igual al promedio.",
+                options: ["Verdadero", "Falso"],
+                answer: "Falso",
+                explanation: "La mediana es el valor central (percentil 50), mientras que el promedio es la suma de los valores dividida por la cantidad. Solo son iguales en distribuciones perfectamente simétricas."
+            },
+            {
+                question: "Si el percentil 80 de las edades en un grupo es 45 años, significa que:",
+                options: ["El 80% del grupo tiene exactamente 45 años.", "El 80% del grupo tiene 45 años o menos.", "El 20% del grupo tiene 45 años o más.", "La edad promedio es 45 años."],
+                answer: "El 80% del grupo tiene 45 años o menos.",
+                explanation: "Un percentil 'X' indica el valor por debajo del cual se encuentra un 'X'% de las observaciones."
+            },
+            {
+                question: "La cantidad de ocurrencias de un valor dentro de una base de datos se conoce como:",
+                options: ["Moda", "Promedio", "Frecuencia", "Percentil"],
+                answer: "Frecuencia",
+                explanation: "La frecuencia es el número de veces que aparece un valor."
+            },
+            {
+                question: "El percentil 50 de un conjunto de datos es también conocido como:",
+                options: ["La moda", "El promedio", "La mediana", "La frecuencia"],
+                answer: "La mediana",
+                explanation: "La mediana es el valor que divide al conjunto de datos en dos mitades iguales, correspondiendo al percentil 50."
+            },
+            {
+                question: "Verdadero o Falso: El EDA (Análisis Exploratorio de Datos) solo se puede realizar mediante visualizaciones.",
+                options: ["Verdadero", "Falso"],
+                answer: "Falso",
+                explanation: "El EDA tiene dos tipos de técnicas: Sumarización (resúmenes estadísticos) y Visualizaciones (gráficos)."
+            },
+            {
+                question: "Calcular el promedio, la moda y la mediana de un conjunto de datos es una técnica de EDA de tipo:",
+                options: ["Visualización", "Sumarización", "Manipulación", "Modelado"],
+                answer: "Sumarización",
+                explanation: "La sumarización consiste en obtener un resumen de los datos a través de medidas específicas como el promedio, la moda, etc."
+            },
+            // 10-visualizacionDeDatosYGraficos.md (10 preguntas)
+            {
+                question: "¿Qué tipo de gráfico es más útil para analizar la evolución de una variable en el tiempo?",
+                options: ["Gráfico de torta", "Gráfico de barras", "Gráfico de líneas", "Gráfico de dispersión"],
+                answer: "Gráfico de líneas",
+                explanation: "Los gráficos de líneas son ideales para mostrar tendencias y evoluciones a lo largo de un período."
+            },
+            {
+                question: "Para analizar la relación y agrupación entre dos variables numéricas, el gráfico más adecuado es:",
+                options: ["Histograma", "Gráfico de dispersión", "Gráfico de torta", "Nube de palabras"],
+                answer: "Gráfico de dispersión",
+                explanation: "El gráfico de dispersión permite visualizar la relación entre dos variables y cómo se agrupan los datos."
+            },
+            {
+                question: "Verdadero o Falso: Un gráfico de torta es la mejor opción para comparar valores entre muchas categorías diferentes.",
+                options: ["Verdadero", "Falso"],
+                answer: "Falso",
+                explanation: "Los gráficos de torta son efectivos para mostrar proporciones de un todo, pero se vuelven confusos con muchas categorías. Un gráfico de barras suele ser mejor para comparaciones."
+            },
+            {
+                question: "Un gráfico que utiliza colores para representar valores en una matriz, útil para detectar patrones en grandes volúmenes de datos, es un:",
+                options: ["Gráfico de cajas", "Gráfico de barras apiladas", "Heatmap (mapa de calor)", "Gráfico de líneas"],
+                answer: "Heatmap (mapa de calor)",
+                explanation: "El heatmap es excelente para identificar visualmente la intensidad o concentración de valores en una matriz."
+            },
+            {
+                question: "La característica de una visualización que se refiere a la habilidad de distinguir visualmente sus elementos gráficos es:",
+                options: ["Perceptiva", "Consistente", "Eficiente", "Clara"],
+                answer: "Clara",
+                explanation: "La claridad es fundamental para que los elementos del gráfico sean fácilmente distinguibles y comprensibles."
+            },
+            {
+                question: "Verdadero o Falso: Un gráfico de cajas (box plot) es útil para ver las palabras más relevantes en un texto.",
+                options: ["Verdadero", "Falso"],
+                answer: "Falso",
+                explanation: "Para eso se utiliza una 'Nube de palabras'. Un gráfico de cajas sirve para analizar la distribución de una variable a través de sus cuartiles."
+            },
+            {
+                question: "Si quieres entender cómo están distribuidos tus datos, incluyendo percentiles y valores atípicos, ¿qué gráfico usarías?",
+                options: ["Gráfico de torta", "Gráfico de cajas", "Gráfico de líneas", "Nube de palabras"],
+                answer: "Gráfico de cajas",
+                explanation: "El gráfico de cajas (box plot) está diseñado específicamente para analizar la distribución de una variable en detalle a través de percentiles."
+            },
+            {
+                question: "Un histograma es un tipo especial de gráfico de barras que se utiliza para analizar:",
+                options: ["Proporciones", "Evoluciones", "Frecuencias", "Relaciones entre dos variables"],
+                answer: "Frecuencias",
+                explanation: "El histograma agrupa los datos en intervalos y muestra la frecuencia de ocurrencia en cada uno."
+            },
+            {
+                question: "Verdadero o Falso: El 'eje secundario' en un gráfico se utiliza cuando todas las variables tienen la misma unidad de medida.",
+                options: ["Verdadero", "Falso"],
+                answer: "Falso",
+                explanation: "El eje secundario es útil precisamente cuando los valores a comparar tienen diferentes unidades de medida o escalas muy distintas."
+            },
+            {
+                question: "Para entender la composición de un total (ej: porcentaje de ventas por región), el gráfico más adecuado sería:",
+                options: ["Gráfico de dispersión", "Gráfico de líneas", "Gráfico de torta o de barras apiladas", "Histograma"],
+                answer: "Gráfico de torta o de barras apiladas",
+                explanation: "Tanto el gráfico de torta como el de barras apiladas son excelentes para mostrar la composición, es decir, cómo las partes conforman un todo."
+            }
+        ];
+
+        const quizForm = document.getElementById('quiz-form');
+        const resultsContainer = document.getElementById('results');
+        let numCorrect = 0;
+        let numAnswered = 0;
+        let quizData = [];
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function selectRandomQuestions() {
+            shuffleArray(allQuestions);
+            quizData = allQuestions.slice(0, 23);
+        }
+
+        function checkAnswer(questionIndex, userAnswer) {
+            const currentQuestion = quizData[questionIndex];
+            const feedbackEl = document.getElementById(`feedback-${questionIndex}`);
+            const questionContainerEl = document.getElementById(`question-container-${questionIndex}`);
+            const radioButtons = document.querySelectorAll(`input[name=question${questionIndex}]`);
+
+            feedbackEl.style.display = 'block';
+            
+            if (userAnswer === currentQuestion.answer) {
+                numCorrect++;
+                feedbackEl.innerHTML = `<strong>Correcto.</strong> ${currentQuestion.explanation}`;
+                feedbackEl.className = 'feedback correct';
+                questionContainerEl.style.borderColor = '#27ae60';
+            } else {
+                feedbackEl.innerHTML = `<strong>Incorrecto.</strong> La respuesta correcta es <strong>"${currentQuestion.answer}"</strong>. ${currentQuestion.explanation}`;
+                feedbackEl.className = 'feedback incorrect';
+                questionContainerEl.style.borderColor = '#c0392b';
+            }
+
+            radioButtons.forEach(radio => {
+                radio.disabled = true;
+            });
+
+            numAnswered++;
+            updateOverallScore();
+        }
+
+        function updateOverallScore() {
+            const score = numAnswered > 0 ? (numCorrect / numAnswered) * 100 : 0;
+            
+            resultsContainer.innerHTML = `Has respondido ${numAnswered} de ${quizData.length} preguntas. Aciertos: ${numCorrect} (${score.toFixed(2)}%).`;
+
+            if (numAnswered === quizData.length) {
+                 const finalScore = (numCorrect / quizData.length) * 100;
+                 if(finalScore >= 60) {
+                    resultsContainer.className = 'correct';
+                    resultsContainer.innerHTML += " ¡Aprobado!";
+                } else {
+                    resultsContainer.className = 'incorrect';
+                    resultsContainer.innerHTML += " Necesitas repasar un poco más.";
+                }
+            }
+        }
+
+        function renderQuiz() {
+            let output = '';
+            quizData.forEach((currentQuestion, questionIndex) => {
+                let optionsOutput = '';
+                currentQuestion.options.forEach(option => {
+                    optionsOutput += `
+                        <div>
+                            <input type="radio" name="question${questionIndex}" value="${option}" id="q${questionIndex}o${option}">
+                            <label for="q${questionIndex}o${option}">${option}</label>
+                        </div>
+                    `;
+                });
+                output += `
+                    <div class="question" id="question-container-${questionIndex}">
+                        <p>${questionIndex + 1}. ${currentQuestion.question}</p>
+                        <div class="options">${optionsOutput}</div>
+                        <div class="feedback" id="feedback-${questionIndex}" style="display:none;"></div>
+                    </div>
+                `;
+            });
+            quizForm.innerHTML = output;
+
+            quizForm.addEventListener('change', (e) => {
+                if (e.target.type === 'radio') {
+                    const questionIndex = parseInt(e.target.name.replace('question', ''));
+                    checkAnswer(questionIndex, e.target.value);
+                }
+            });
+        }
+        
+        selectRandomQuestions();
+        renderQuiz();
+        updateOverallScore();
+
+    </script>
+
+</body>
+</html>

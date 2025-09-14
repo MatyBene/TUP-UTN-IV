@@ -1,0 +1,329 @@
+/* CSS Simple y Fácil de Recordar */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+/* Header con nav */
+header {
+    background: white;
+    padding: 1rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.controls-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 2rem;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.nav-search {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.nav-search input {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    min-width: 250px;
+}
+
+/* Main layout - Grid simple */
+main {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+/* Secciones */
+.form-section, .dioses-section {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.form-section h2, .dioses-section h2 {
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+/* Formulario simple */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+/* Botones simples */
+button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#submitBtn {
+    background: #667eea;
+    color: white;
+    flex: 1;
+}
+
+#submitBtn:hover {
+    background: #5a67d8;
+}
+
+#cancelBtn {
+    background: #e53e3e;
+    color: white;
+    flex: 1;
+}
+
+.nav-buttons button {
+    background: #48bb78;
+    color: white;
+}
+
+.nav-buttons button:hover {
+    background: #38a169;
+}
+
+#buscarAtributoBtn {
+    background: #ed8936;
+    color: white;
+}
+
+#buscarAtributoBtn:hover {
+    background: #dd6b20;
+}
+
+/* Container de dioses - Flexbox simple */
+.dioses-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+/* Cards de dioses simples */
+.dios-card {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 1.5rem;
+    border-left: 5px solid #ddd;
+}
+
+.dios-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.dios-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.dios-poder {
+    background: #667eea;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-weight: bold;
+}
+
+.dios-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.dios-info p {
+    margin: 0.2rem 0;
+    color: #555;
+}
+
+.dios-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.btn-editar {
+    background: #4299e1;
+    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+.btn-eliminar {
+    background: #f56565;
+    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+/* Clases de poder - SIMPLES */
+.supremo {
+    border-left-color: #ffd700;
+    background: #fffbeb;
+}
+
+.supremo .dios-poder {
+    background: #ffd700;
+    color: #333;
+}
+
+.poderoso {
+    border-left-color: #9f7aea;
+    background: #faf5ff;
+}
+
+.poderoso .dios-poder {
+    background: #9f7aea;
+}
+
+.legendario {
+    border-left-color: #e53e3e;
+    background: #fed7d7;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+.legendario .dios-poder {
+    background: #e53e3e;
+}
+
+@keyframes glow {
+    from { box-shadow: 0 0 5px rgba(229, 62, 62, 0.5); }
+    to { box-shadow: 0 0 20px rgba(229, 62, 62, 0.8); }
+}
+
+/* Vista simple */
+.dios-simple {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dios-simple h3 {
+    color: #333;
+    margin: 0;
+}
+
+.dios-simple p {
+    color: #666;
+    margin: 0;
+    font-style: italic;
+}
+
+/* Vista de atributos */
+.atributo-item {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Mensajes de error */
+.error-message {
+    background: #fed7d7;
+    color: #c53030;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    border: 2px solid #fc8181;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .controls-nav {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .nav-buttons {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .nav-search {
+        width: 100%;
+    }
+    
+    .nav-search input {
+        flex: 1;
+        min-width: auto;
+    }
+    
+    main {
+        grid-template-columns: 1fr;
+    }
+    
+    .dios-info {
+        grid-template-columns: 1fr;
+    }
+}
