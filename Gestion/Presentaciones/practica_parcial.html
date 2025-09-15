@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica Parcial - Administración y Gestión de Proyectos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2980b9, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .stats {
+            background: #f8f9fa;
+            padding: 20px;
+            display: flex;
+            justify-content: space-around;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #2980b9;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+            padding: 25px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+
+        .question-container.answered {
+            background: #f0f8ff;
+            border-color: #3498db;
+        }
+
+        .question-number {
+            background: #3498db;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .options {
+            margin-bottom: 20px;
+        }
+
+        .option {
+            display: block;
+            padding: 12px 18px;
+            margin-bottom: 10px;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .option:hover {
+            background: #f0f8ff;
+            border-color: #3498db;
+        }
+
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .explanation {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .explanation.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .explanation h4 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #2980b9, #2c3e50);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .progress {
+            background: #e9ecef;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #28a745, #20c997);
+            height: 100%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .final-score {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .final-score.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .final-score h2 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .final-score p {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Práctica Parcial</h1>
+            <p>Administración y Gestión de Proyectos - UTN</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="correct-count">0</div>
+                <div class="stat-label">Correctas</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="total-answered">0</div>
+                <div class="stat-label">Respondidas</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="percentage">0%</div>
+                <div class="stat-label">Aciertos</div>
+            </div>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <div class="content">
+            <div id="questions-container"></div>
+            
+            <div class="controls">
+                <button class="btn" onclick="resetQuiz()">🔄 Nueva Práctica</button>
+                <button class="btn" onclick="showAllAnswers()">👁️ Ver Todas las Respuestas</button>
+            </div>
+
+            <div class="final-score" id="final-score">
+                <h2 id="final-percentage">0%</h2>
+                <p id="final-message">¡Excelente trabajo!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Banco de preguntas extenso basado en el material de estudio
+        const questionBank = [
+            // Preguntas sobre Fundamentos
+            {
+                question: "Una idea es lo mismo que un proyecto según los fundamentos de gestión de proyectos.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 1,
+                explanation: "FALSO. Una idea es solo el punto de partida, una necesidad o propuesta que busca generar valor. Un proyecto, en cambio, es un conjunto de actividades temporales y únicas con un objetivo específico, que tiene inicio, desarrollo y cierre definidos."
+            },
+            {
+                question: "La productividad en un proyecto depende únicamente del esfuerzo invertido.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 1,
+                explanation: "FALSO. La productividad no solo depende del esfuerzo, sino de cómo se organiza. Un esfuerzo sin organización puede ser contraproducente y generar baja eficiencia, como se demostró en la construcción del Tren Transcontinental."
+            },
+            {
+                question: "¿Cuál fue la principal lección aprendida del proyecto del Tren Transcontinental?",
+                type: "mc",
+                options: [
+                    "Que se necesita más mano de obra para acelerar el proyecto",
+                    "Que trabajar más horas siempre resulta en mayor productividad",
+                    "Que el esfuerzo sin organización no es suficiente para el éxito",
+                    "Que los proyectos ferroviarios son imposibles de gestionar"
+                ],
+                correct: 2,
+                explanation: "La respuesta correcta es C. El proyecto del Tren Transcontinental demostró que la creencia inicial de que más horas = más productividad llevó a alta accidentalidad, baja eficiencia y falta de planificación. Esta experiencia fue fundamental para el nacimiento de la gestión de proyectos moderna."
+            },
+            {
+                question: "El Pacific Railroad Act fue firmado en 1862 por Abraham Lincoln.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. El Pacific Railroad Act fue firmado en 1862 por Abraham Lincoln y autorizó la construcción del Tren Transcontinental, conectando el este y oeste de Estados Unidos."
+            },
+            {
+                question: "¿Qué compañías construyeron el Tren Transcontinental?",
+                type: "mc",
+                options: [
+                    "Central Pacific Railroad y Southern Pacific Railroad",
+                    "Union Pacific Railroad y Central Pacific Railroad",
+                    "Northern Pacific Railway y Great Northern Railway",
+                    "Baltimore and Ohio Railroad y Pennsylvania Railroad"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. Union Pacific Railroad construyó desde Omaha, Nebraska hacia el oeste, mientras que Central Pacific Railroad construyó desde Sacramento, California hacia el este."
+            },
+
+            // Preguntas sobre Frederick Taylor
+            {
+                question: "Frederick Taylor es conocido como el 'Padre de la Administración Científica'.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. Frederick Taylor es reconocido como el 'Padre de la Administración Científica' por sus contribuciones al estudio científico del trabajo y la optimización de la productividad."
+            },
+            {
+                question: "¿Cuál era la idea central de Frederick Taylor?",
+                type: "mc",
+                options: [
+                    "Los trabajadores deben trabajar más horas para ser más productivos",
+                    "Lo importante no es trabajar más duro, sino trabajar de manera más inteligente",
+                    "La tecnología es más importante que las personas en los proyectos",
+                    "Los gerentes deben hacer todo el trabajo de planificación sin consultar a los obreros"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. Taylor creía que 'Lo importante no es trabajar más duro, sino trabajar de manera más inteligente', enfocándose en la eficiencia y optimización de métodos de trabajo."
+            },
+            {
+                question: "Según Taylor, la selección científica del personal implica que el trabajador debe adaptarse al puesto disponible.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 1,
+                explanation: "FALSO. Taylor propuso la selección científica y entrenamiento, donde se asigna a cada persona el puesto adecuado según sus aptitudes y se la capacita. Esto rompe con la lógica tradicional de que el trabajador debe adaptarse al puesto."
+            },
+            {
+                question: "¿Cuál de las siguientes NO es una propuesta clave de Taylor?",
+                type: "mc",
+                options: [
+                    "Estudio científico del trabajo",
+                    "Selección científica y entrenamiento del personal",
+                    "Eliminación completa de la participación obrera en la planificación",
+                    "Cooperación entre dirigentes y obreros"
+                ],
+                correct: 2,
+                explanation: "La respuesta correcta es C. Taylor NO propuso eliminar la participación obrera. Al contrario, promovió la cooperación entre dirigentes y obreros, donde los dirigentes planifican y los obreros ejecutan y aportan su experiencia."
+            },
+            {
+                question: "La aplicación rígida de los principios de Taylor puede llevar a la deshumanización del trabajo.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. Entre los riesgos de aplicar rígidamente el enfoque de Taylor se encuentra la deshumanización del trabajo, la falta de flexibilidad, desmotivación por exceso de control y resistencia al cambio."
+            },
+
+            // Preguntas sobre Henry Gantt
+            {
+                question: "Henry Gantt creó el diagrama que lleva su nombre para visualizar la planificación de proyectos.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. Henry Gantt creó el Diagrama de Gantt, una herramienta visual de barras para planificar y controlar proyectos, mostrando tareas, duración, secuencia y avance."
+            },
+            {
+                question: "¿Cuál era la idea central de Henry Gantt sobre la gestión de proyectos?",
+                type: "mc",
+                options: [
+                    "Lo importante es solo definir qué se debe hacer",
+                    "Lo importante no es solo definir qué se debe hacer, sino cuándo, en qué orden y con qué seguimiento",
+                    "Los diagramas son innecesarios en la gestión de proyectos",
+                    "Solo se debe planificar al final del proyecto"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. Gantt creía que 'Lo importante no es solo definir qué se debe hacer, sino cuándo, en qué orden y con qué seguimiento', lo que llevó a la creación de su famoso diagrama."
+            },
+            {
+                question: "¿Qué permite visualizar principalmente el Diagrama de Gantt?",
+                type: "mc",
+                options: [
+                    "Solo las tareas del proyecto",
+                    "Solo la duración de las actividades",
+                    "Tareas, duración, secuencia y avance del proyecto",
+                    "Únicamente los recursos necesarios"
+                ],
+                correct: 2,
+                explanation: "La respuesta correcta es C. El Diagrama de Gantt permite visualizar tareas, su duración, secuencia y avance del proyecto, proporcionando una visión integral de la planificación."
+            },
+            {
+                question: "El Diagrama de Gantt se adapta perfectamente a todas las metodologías de desarrollo, incluyendo las ágiles.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 1,
+                explanation: "FALSO. Una de las limitaciones del Diagrama de Gantt es que no se adapta bien a metodologías ágiles, ya que tiende a ser rígido ante cambios y puede dar una falsa sensación de control."
+            },
+            {
+                question: "¿Cuál de las siguientes es una ventaja del Diagrama de Gantt?",
+                type: "mc",
+                options: [
+                    "Flexibilidad ante cambios frecuentes",
+                    "Simplicidad visual en proyectos grandes",
+                    "Identificación clara de dependencias entre tareas",
+                    "Adaptación perfecta a metodologías ágiles"
+                ],
+                correct: 2,
+                explanation: "La respuesta correcta es C. Una ventaja clave del Diagrama de Gantt es la identificación clara de dependencias entre tareas, facilitando la planificación y seguimiento del proyecto."
+            },
+
+            // Preguntas sobre PMI y PMBOK
+            {
+                question: "El Project Management Institute (PMI) fue fundado en 1969.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. El PMI fue fundado en 1969 con el objetivo de profesionalizar la disciplina de gestión de proyectos, estableciendo estándares, certificaciones y buenas prácticas."
+            },
+            {
+                question: "¿Cuántos procesos define el PMBOK® Guide en total?",
+                type: "mc",
+                options: [
+                    "42 procesos",
+                    "49 procesos",
+                    "55 procesos",
+                    "60 procesos"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. El PMBOK® Guide define 49 procesos distribuidos en 5 grupos de procesos y 10 áreas de conocimiento."
+            },
+            {
+                question: "Los 5 grupos de procesos del PMBOK son: Inicio, Planificación, Ejecución, Monitoreo y Control, y Cierre.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. Estos son efectivamente los 5 grupos de procesos que definen el ciclo de vida de la gestión de proyectos según el PMBOK."
+            },
+            {
+                question: "¿Cuántas áreas de conocimiento define el PMBOK?",
+                type: "mc",
+                options: [
+                    "8 áreas",
+                    "10 áreas",
+                    "12 áreas",
+                    "15 áreas"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. El PMBOK define 10 áreas de conocimiento: Integración, Alcance, Cronograma, Costos, Calidad, Recursos, Comunicaciones, Riesgos, Adquisiciones e Interesados."
+            },
+            {
+                question: "¿Cuál de las siguientes NO es un área de conocimiento del PMBOK?",
+                type: "mc",
+                options: [
+                    "Gestión de la Calidad",
+                    "Gestión de los Riesgos",
+                    "Gestión de la Innovación",
+                    "Gestión de las Comunicaciones"
+                ],
+                correct: 2,
+                explanation: "La respuesta correcta es C. 'Gestión de la Innovación' no es una de las 10 áreas de conocimiento del PMBOK. Las áreas son: Integración, Alcance, Cronograma, Costos, Calidad, Recursos, Comunicaciones, Riesgos, Adquisiciones e Interesados."
+            },
+
+            // Preguntas sobre EDT/WBS
+            {
+                question: "La Estructura de Desglose del Trabajo (EDT) incluye actividades como 'programar' y 'testear'.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 1,
+                explanation: "FALSO. La EDT no incluye actividades como 'programar' o 'testear', sino entregables. Las actividades se derivan posteriormente de los entregables definidos en la EDT."
+            },
+            {
+                question: "¿Qué es la Estructura de Desglose del Trabajo (EDT/WBS)?",
+                type: "mc",
+                options: [
+                    "Una lista de actividades cronológicamente ordenadas",
+                    "Una descomposición jerárquica orientada a los entregables del proyecto",
+                    "Un diagrama de flujo de los procesos del proyecto",
+                    "Una matriz de responsabilidades del equipo"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. La EDT/WBS es una descomposición jerárquica orientada a los entregables del proyecto, organizando y definiendo el alcance total del trabajo."
+            },
+            {
+                question: "¿Cuál es el Nivel 1 de la EDT?",
+                type: "mc",
+                options: [
+                    "Los entregables principales",
+                    "El proyecto completo",
+                    "Los subentregables",
+                    "Los componentes detallados"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. El Nivel 1 de la EDT representa el proyecto completo. El Nivel 2 incluye los entregables principales, el Nivel 3 los subentregables, y el Nivel 4+ los componentes detallados."
+            },
+            {
+                question: "La EDT es recomendable para todos los tipos de proyecto, sin excepción.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 1,
+                explanation: "FALSO. La EDT es especialmente recomendable para proyectos con múltiples entregables, coordinación entre equipos, necesidad de planificación detallada y trazabilidad del alcance, pero no es necesaria para todos los tipos de proyecto."
+            },
+
+            // Preguntas sobre Triple Restricción
+            {
+                question: "¿Cuáles son las tres restricciones principales de un proyecto?",
+                type: "mc",
+                options: [
+                    "Tiempo, Calidad, Recursos",
+                    "Tiempo, Alcance, Costos",
+                    "Alcance, Calidad, Comunicación",
+                    "Costos, Riesgos, Cronograma"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. Las tres restricciones principales son Tiempo (duración del proyecto), Alcance (qué se va a entregar) y Costos (presupuesto asignado)."
+            },
+            {
+                question: "Las tres restricciones de un proyecto (tiempo, alcance, costos) están interrelacionadas.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. Las tres restricciones están interrelacionadas y un cambio en una afecta necesariamente a las otras dos. El director de proyecto debe gestionar este equilibrio."
+            },
+            {
+                question: "Si aumentamos el alcance de un proyecto sin cambiar el presupuesto, ¿qué es lo más probable que ocurra?",
+                type: "mc",
+                options: [
+                    "El tiempo se mantiene igual",
+                    "El tiempo se reduce",
+                    "El tiempo se extiende",
+                    "No hay impacto en ninguna otra restricción"
+                ],
+                correct: 2,
+                explanation: "La respuesta correcta es C. Al aumentar el alcance sin aumentar el presupuesto, generalmente el tiempo se extiende porque se necesita más trabajo con los mismos recursos, demostrando la interrelación de las restricciones."
+            },
+
+            // Preguntas sobre Estimación
+            {
+                question: "El esfuerzo y la duración de un proyecto son la misma cosa.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 1,
+                explanation: "FALSO. El esfuerzo es la cantidad de trabajo requerido (medido en HH, MD, MM), mientras que la duración es el tiempo calendario necesario para completar el trabajo, considerando la disponibilidad de recursos."
+            },
+            {
+                question: "¿Qué es el esfuerzo en la gestión de proyectos?",
+                type: "mc",
+                options: [
+                    "El tiempo calendario del proyecto",
+                    "La cantidad de trabajo requerido para completar el proyecto",
+                    "El presupuesto total del proyecto",
+                    "La complejidad técnica del proyecto"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. El esfuerzo es la cantidad total de trabajo requerido para completar un proyecto o tarea, generalmente medido en horas-hombre (HH), días-hombre (MD) o meses-hombre (MM)."
+            },
+            {
+                question: "Las estimaciones preliminares son más exactas que las estimaciones detalladas.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 1,
+                explanation: "FALSO. Las estimaciones preliminares son para ofertas o viabilidad, son más gruesas y menos exactas (pero más vinculantes). Las estimaciones detalladas son más precisas y se realizan durante la planificación."
+            },
+
+            // Preguntas sobre Análisis de Puntos de Función
+            {
+                question: "El Análisis de Puntos de Función (FPA) mide el tamaño del software desde la perspectiva del usuario.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. El FPA es una técnica para medir el tamaño funcional del software desde la perspectiva del usuario, sin depender de la tecnología de implementación."
+            },
+            {
+                question: "¿Por qué el FPA es superior a la métrica de 'líneas de código'?",
+                type: "mc",
+                options: [
+                    "Porque es más fácil de contar",
+                    "Porque mide el valor funcional independiente de la tecnología",
+                    "Porque siempre da números más altos",
+                    "Porque incluye comentarios del código"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. El FPA es superior porque mide el valor funcional que el sistema ofrece al usuario, siendo más objetivo y permitiendo comparaciones entre proyectos con distintas tecnologías, a diferencia de las líneas de código que son una métrica técnica y superficial."
+            },
+            {
+                question: "¿Cuáles son los dos tipos principales de funciones en el FPA?",
+                type: "mc",
+                options: [
+                    "Funciones Simples y Funciones Complejas",
+                    "Funciones de Transacción y Funciones de Datos",
+                    "Funciones Internas y Funciones Externas",
+                    "Funciones de Entrada y Funciones de Salida"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. El FPA clasifica las funciones en dos tipos principales: Funciones de Transacción (interacción con usuario: EE, SE, CE) y Funciones de Datos (almacenamiento: ALI/ILF, AIE/EIF)."
+            },
+            {
+                question: "¿Qué significa EE en el contexto del FPA?",
+                type: "mc",
+                options: [
+                    "Elementos Externos",
+                    "Entradas Externas",
+                    "Estructuras Especiales",
+                    "Estimaciones Exactas"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. EE significa 'Entradas Externas' y representa las funciones donde el usuario envía datos al sistema para ser procesados."
+            },
+            {
+                question: "Los Archivos Lógicos Internos (ALI/ILF) son datos que el sistema mantiene.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. Los ALI/ILF (Archivos Lógicos Internos / Internal Logical Files) representan los datos que el sistema mantiene y controla, a diferencia de los AIE/EIF que son datos de otros sistemas."
+            },
+            {
+                question: "¿Qué son los DET en el FPA?",
+                type: "mc",
+                options: [
+                    "Datos Externos Totales",
+                    "Data Element Type - campos individuales o atributos",
+                    "Diagramas de Estructura Técnica",
+                    "Documentos de Especificación Técnica"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. DET significa 'Data Element Type' y representa campos individuales o atributos (como nombre, DNI) que forman parte de los archivos lógicos."
+            },
+
+            // Preguntas sobre COCOMO
+            {
+                question: "COCOMO fue propuesto por Boehm en 1981.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. COCOMO (COnstructive COst MOdel) es un modelo empírico de coste propuesto por Boehm en 1981, basado en datos de 63 proyectos de software."
+            },
+            {
+                question: "¿Cuáles son los tres niveles de complejidad de proyectos en COCOMO Básico?",
+                type: "mc",
+                options: [
+                    "Simple, Mediano, Complejo",
+                    "Básico, Intermedio, Avanzado",
+                    "Orgánico, Semiacoplado, Empotrado",
+                    "Pequeño, Grande, Masivo"
+                ],
+                correct: 2,
+                explanation: "La respuesta correcta es C. COCOMO clasifica los proyectos en tres niveles: Orgánico (pequeños, mucha experiencia), Semiacoplado (intermedios, experiencia mixta) y Empotrado (complejos, restrictivos, innovadores)."
+            },
+            {
+                question: "¿Qué caracteriza a un proyecto 'Orgánico' en COCOMO?",
+                type: "mc",
+                options: [
+                    "Proyectos muy complejos con muchas restricciones",
+                    "Proyectos pequeños/medianos con mucha experiencia y pocas restricciones",
+                    "Proyectos que requieren innovación tecnológica",
+                    "Proyectos con equipos distribuidos globalmente"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. Los proyectos Orgánicos son pequeños/medianos, con equipos que tienen mucha experiencia, pocas restricciones, equipos pequeños y entorno familiar (ej: sistema simple de turnos)."
+            },
+            {
+                question: "¿Qué caracteriza a un proyecto 'Empotrado' en COCOMO?",
+                type: "mc",
+                options: [
+                    "Proyectos simples con pocos requisitos",
+                    "Proyectos complejos, restrictivos e innovadores",
+                    "Proyectos de tamaño mediano con experiencia mixta",
+                    "Proyectos que no requieren planificación especial"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. Los proyectos Empotrados son complejos, restrictivos, innovadores, desarrollados en un entorno de hardware/software estricto (ej: software de control aéreo)."
+            },
+            {
+                question: "COCOMO utiliza KSLOC como medida de tamaño del software.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. COCOMO utiliza KSLOC (Thousands of Source Lines of Code - miles de líneas de código fuente) como métrica principal para medir el tamaño del software."
+            },
+            {
+                question: "¿Qué significa PM en las ecuaciones de COCOMO?",
+                type: "mc",
+                options: [
+                    "Project Manager",
+                    "Person-Months (meses-persona)",
+                    "Project Methodology",
+                    "Performance Metrics"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. PM significa 'Person-Months' (meses-persona) y representa el esfuerzo requerido, calculado con la fórmula PM = A * (KSLOC)^B."
+            },
+            {
+                question: "¿Qué significa TDEV en COCOMO?",
+                type: "mc",
+                options: [
+                    "Total Development",
+                    "Technical Development",
+                    "Time Development (tiempo de desarrollo en meses)",
+                    "Testing and Development"
+                ],
+                correct: 2,
+                explanation: "La respuesta correcta es C. TDEV significa 'Time Development' y representa la duración total del proyecto en meses calendario, calculado con TDEV = C * (PM)^D."
+            },
+
+            // Preguntas sobre Técnicas de Estimación
+            {
+                question: "La técnica de estimación por 'Analogía' compara el proyecto propuesto con proyectos anteriores similares.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. La técnica de Analogía consiste en comparar el proyecto propuesto con proyectos anteriores similares para hacer estimaciones basadas en experiencias pasadas."
+            },
+            {
+                question: "¿Cuál de las siguientes NO es una técnica de estimación mencionada en el material?",
+                type: "mc",
+                options: [
+                    "Opinión de Expertos",
+                    "Analogía",
+                    "Estimación Aleatoria",
+                    "Descomposición"
+                ],
+                correct: 2,
+                explanation: "La respuesta correcta es C. 'Estimación Aleatoria' no es una técnica mencionada. Las técnicas incluyen: Ninguna, Opinión de Expertos, Analogía, Base Histórica y Descomposición."
+            },
+            {
+                question: "¿Qué es la técnica de descomposición en estimación?",
+                type: "mc",
+                options: [
+                    "Eliminar partes innecesarias del proyecto",
+                    "Sumar las estimaciones de componentes más pequeños para obtener el costo total",
+                    "Dividir el equipo en grupos más pequeños",
+                    "Reducir el alcance del proyecto"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. La descomposición consiste en sumar las estimaciones de componentes más pequeños para obtener el costo total del proyecto, ya sea por fases o por módulos."
+            },
+            {
+                question: "Una ventaja de la técnica de descomposición es que fomenta la participación del equipo.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. Entre las ventajas de la descomposición están que fomenta la participación del equipo y permite un análisis detallado de los componentes del proyecto."
+            },
+
+            // Preguntas sobre Gestión y Liderazgo
+            {
+                question: "El director de proyecto articula procesos, gestiona restricciones y guía al equipo para cumplir objetivos.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. Esta es exactamente la definición del rol del director de proyecto: articular procesos, gestionar las restricciones del proyecto y guiar al equipo hacia el cumplimiento de los objetivos."
+            },
+            {
+                question: "¿Cuál es el objetivo principal de la gestión de proyectos?",
+                type: "mc",
+                options: [
+                    "Minimizar el costo del proyecto únicamente",
+                    "Coordinar personas, recursos, tiempos y objetivos eficientemente",
+                    "Maximizar la duración del proyecto",
+                    "Reducir al mínimo la comunicación"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. La gestión de proyectos busca planificar, organizar, ejecutar, controlar y cerrar un proyecto eficientemente, coordinando personas, recursos, tiempos y objetivos."
+            },
+            {
+                question: "La gestión permite definir objetivos claros y prever riesgos.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. La gestión permite definir objetivos claros, asignar roles y responsabilidades, optimizar recursos, prever riesgos y monitorear avances, evitando que el esfuerzo se disperse."
+            },
+
+            // Preguntas sobre Errores en Estimación
+            {
+                question: "¿Cuál de los siguientes es un error común en la estimación?",
+                type: "mc",
+                options: [
+                    "Usar datos históricos de la organización",
+                    "Subestimar el tiempo para estimar bien",
+                    "Involucrar expertos en el proceso",
+                    "Reestimar periódicamente"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. Subestimar el tiempo para estimar bien es uno de los errores comunes, junto con requisitos imprecisos, no reconocer diferencias con proyectos anteriores, y subestimar el tamaño del proyecto."
+            },
+            {
+                question: "No reconocer que los proyectos actuales son diferentes a los anteriores es un error común en estimación.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. Este es uno de los errores comunes identificados: no reconocer que los proyectos actuales son diferentes a los anteriores, lo que puede llevar a estimaciones incorrectas."
+            },
+
+            // Preguntas sobre Conversión PFA a KSLOC
+            {
+                question: "La conversión de PFA a KSLOC varía según el lenguaje de programación utilizado.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. La conversión de Puntos de Función Ajustados (PFA) a KSLOC utiliza una tabla de líneas de código por punto de función que varía según el lenguaje (ej: Python 40-50 LOC/PF)."
+            },
+            {
+                question: "¿Qué es el Factor de Ajuste (FA) en el cálculo de Puntos de Función?",
+                type: "mc",
+                options: [
+                    "Un multiplicador fijo de 1.5 para todos los proyectos",
+                    "Un factor basado en 14 características generales del sistema",
+                    "La cantidad de desarrolladores en el equipo",
+                    "El tiempo estimado de desarrollo"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. El Factor de Ajuste se basa en 14 características generales del sistema (GSC) y se usa en la fórmula: PFA = PFSA * [0.65 + (0.01 * FA)]."
+            },
+
+            // Preguntas sobre Aplicación Práctica
+            {
+                question: "El PMBOK se puede aplicar a proyectos de desarrollo de software.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. El material incluye un ejemplo práctico de aplicación del PMBOK en el desarrollo de una app móvil para turnos médicos, mostrando cómo se aplican los grupos de procesos."
+            },
+            {
+                question: "¿En qué grupo de procesos del PMBOK se realiza el desarrollo de funcionalidades?",
+                type: "mc",
+                options: [
+                    "Inicio",
+                    "Planificación",
+                    "Ejecución",
+                    "Cierre"
+                ],
+                correct: 2,
+                explanation: "La respuesta correcta es C. El desarrollo de funcionalidades se realiza en el grupo de procesos de Ejecución, donde se realiza el trabajo planificado y se gestionan los equipos."
+            },
+            {
+                question: "¿En qué grupo de procesos se establece el cronograma del proyecto?",
+                type: "mc",
+                options: [
+                    "Inicio",
+                    "Planificación",
+                    "Ejecución",
+                    "Monitoreo y Control"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. En el grupo de Planificación se establece el alcance, cronograma, costos, calidad, riesgos y recursos necesarios para el proyecto."
+            },
+
+            // Preguntas sobre Ventajas y Desventajas
+            {
+                question: "Una ventaja del enfoque de Taylor es el mejor aprovechamiento del talento.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. Entre las ventajas del enfoque de Taylor están la mayor eficiencia, mejor aprovechamiento del talento, capacitación dirigida, motivación por reconocimiento y reducción de errores."
+            },
+            {
+                question: "¿Cuál es una limitación del Diagrama de Gantt?",
+                type: "mc",
+                options: [
+                    "No muestra la duración de las tareas",
+                    "No permite identificar dependencias",
+                    "Rigidez ante cambios frecuentes",
+                    "No se puede usar en software"
+                ],
+                correct: 2,
+                explanation: "La respuesta correcta es C. Entre las limitaciones del Diagrama de Gantt están la rigidez ante cambios, complejidad visual en proyectos grandes, falsa sensación de control y mala adaptación a metodologías ágiles."
+            },
+            {
+                question: "Una desventaja de COCOMO es que supone que el tamaño es el principal factor de coste.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. Entre las desventajas de COCOMO están que supone que el tamaño es el principal factor, no considera adecuadamente las características del equipo, y puede dar estimaciones poco precisas."
+            },
+
+            // Preguntas sobre Mejores Prácticas
+            {
+                question: "¿Cuál es una mejor práctica para utilizar modelos de estimación como COCOMO?",
+                type: "mc",
+                options: [
+                    "Usar siempre los parámetros originales sin modificar",
+                    "Personalizar el modelo adaptando sus parámetros al contexto",
+                    "Aplicar solo a proyectos pequeños",
+                    "Ignorar los datos históricos de la organización"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. Una mejor práctica es personalizar el modelo adaptando sus entradas y parámetros a los requisitos específicos del proyecto y contexto organizacional."
+            },
+            {
+                question: "Es recomendable combinar múltiples técnicas de estimación para mejorar la precisión.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. Combinar múltiples técnicas de estimación es una mejor práctica que ayuda a reducir sesgos y triangular los resultados, mejorando la precisión al no depender de un único método."
+            },
+
+            // Preguntas sobre Historia y Contexto
+            {
+                question: "La Central Pacific Railroad utilizó principalmente mano de obra china.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. Central Pacific Railroad (que construía desde California hacia el este) utilizó principalmente mano de obra china, mientras que Union Pacific utilizó irlandeses y veteranos."
+            },
+            {
+                question: "¿Qué terreno representó un desafío particular para la construcción del Tren Transcontinental?",
+                type: "mc",
+                options: [
+                    "Los Grandes Lagos",
+                    "Las Montañas Rocosas",
+                    "La Sierra Nevada",
+                    "El Desierto de Mojave"
+                ],
+                correct: 2,
+                explanation: "La respuesta correcta es C. La Sierra Nevada representó un terreno especialmente difícil, donde se tuvo que usar explosivos como la nitroglicerina para abrir camino."
+            },
+
+            // Preguntas sobre Definiciones Específicas
+            {
+                question: "¿Qué son las RET en el Análisis de Puntos de Función?",
+                type: "mc",
+                options: [
+                    "Recursos Externos Totales",
+                    "Record Element Type - subgrupos de datos con significado propio",
+                    "Requisitos Especiales Técnicos",
+                    "Relaciones Entre Tablas"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. RET significa 'Record Element Type' y representa subgrupos de datos dentro de un archivo lógico que tienen significado propio (ej: sucursal en tabla de empleados)."
+            },
+            {
+                question: "¿Qué significa CE en las funciones de transacción del FPA?",
+                type: "mc",
+                options: [
+                    "Características Especiales",
+                    "Consultas Externas",
+                    "Controles de Entrada",
+                    "Certificaciones Externas"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. CE significa 'Consultas Externas' y representa funciones donde el usuario pide información al sistema sin procesarla."
+            },
+
+            // Preguntas sobre Fórmulas y Cálculos
+            {
+                question: "La fórmula para calcular los Puntos de Función Ajustados es: PFA = PFSA * [0.65 + (0.01 * FA)].",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. Esta es la fórmula correcta donde PFSA son los Puntos de Función Sin Ajustar y FA es el Factor de Ajuste basado en las 14 características generales del sistema."
+            },
+            {
+                question: "En COCOMO, ¿cómo se calcula la duración (TDEV) a partir del esfuerzo (PM)?",
+                type: "mc",
+                options: [
+                    "TDEV = PM / 2",
+                    "TDEV = C * (PM)^D",
+                    "TDEV = PM * A",
+                    "TDEV = PM + B"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. En COCOMO, la duración se calcula con TDEV = C * (PM)^D, donde C y D son coeficientes que varían según el modo de desarrollo."
+            },
+
+            // Preguntas Integradoras
+            {
+                question: "¿Cuál es la principal diferencia entre medición y estimación en proyectos de software?",
+                type: "mc",
+                options: [
+                    "No hay diferencia, son sinónimos",
+                    "La medición (FPA) determina el tamaño funcional, la estimación predice esfuerzo y costo",
+                    "La estimación es más precisa que la medición",
+                    "La medición solo se usa al final del proyecto"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. La medición (como FPA) determina el tamaño funcional desde el punto de vista del usuario, mientras que la estimación predice esfuerzo, tiempo y costo basándose en múltiples factores incluyendo la medición."
+            },
+            {
+                question: "¿Por qué la experiencia del Tren Transcontinental es relevante para la gestión de proyectos de software actual?",
+                type: "mc",
+                options: [
+                    "Porque ambos usan la misma tecnología",
+                    "Porque ambos requieren gestión de recursos, tiempos, riesgos y comunicación efectiva",
+                    "Porque tienen la misma duración típica",
+                    "Porque usan los mismos materiales"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. Ambos tipos de proyecto comparten similitudes en la necesidad de gestión de recursos, tiempos, riesgos y comunicación efectiva, aunque el contexto tecnológico sea diferente."
+            },
+
+            // Preguntas sobre Aplicación Moderna
+            {
+                question: "¿En qué herramientas modernas se utiliza el concepto del Diagrama de Gantt?",
+                type: "mc",
+                options: [
+                    "Solo en MS Project",
+                    "MS Project, Trello, Jira, Asana",
+                    "Únicamente en software de CAD",
+                    "Solo en herramientas de contabilidad"
+                ],
+                correct: 1,
+                explanation: "La respuesta correcta es B. El concepto del Diagrama de Gantt se utiliza en herramientas modernas como MS Project, Trello, Jira, Asana para planificación de entregas, seguimiento de proyectos y presentaciones ejecutivas."
+            },
+            {
+                question: "La resistencia al cambio por parte de los dirigentes, según Taylor, se debe principalmente a la zona de confort.",
+                type: "tf",
+                options: ["Verdadero", "Falso"],
+                correct: 0,
+                explanation: "VERDADERO. Taylor identificó que la resistencia al cambio por parte de los dirigentes se debe a zona de confort, falta de formación técnica, miedo a la pérdida de autoridad, inercia organizacional y costos percibidos."
+            }
+        ];
+
+        let currentQuestions = [];
+        let stats = { correct: 0, total: 0 };
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function selectRandomQuestions() {
+            const shuffled = shuffleArray(questionBank);
+            currentQuestions = shuffled.slice(0, 20);
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            currentQuestions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-container';
+                questionDiv.id = `question-${index}`;
+
+                const optionsHtml = question.options.map((option, optIndex) => 
+                    `<label class="option" onclick="selectAnswer(${index}, ${optIndex})">
+                        <input type="radio" name="question-${index}" value="${optIndex}" style="display: none;">
+                        ${option}
+                    </label>`
+                ).join('');
+
+                questionDiv.innerHTML = `
+                    <div class="question-number">Pregunta ${index + 1}</div>
+                    <div class="question-text">${question.question}</div>
+                    <div class="options">${optionsHtml}</div>
+                    <div class="explanation" id="explanation-${index}">
+                        <h4>📚 Explicación:</h4>
+                        <p>${question.explanation}</p>
+                    </div>
+                `;
+
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectAnswer(questionIndex, selectedOption) {
+            const question = currentQuestions[questionIndex];
+            const questionContainer = document.getElementById(`question-${questionIndex}`);
+            const options = questionContainer.querySelectorAll('.option');
+            const explanation = document.getElementById(`explanation-${questionIndex}`);
+
+            // Disable all options
+            options.forEach(option => option.classList.add('disabled'));
+
+            // Mark correct and incorrect answers
+            options.forEach((option, index) => {
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                }
+                if (index === selectedOption && index !== question.correct) {
+                    option.classList.add('incorrect');
+                }
+            });
+
+            // Show explanation
+            explanation.classList.add('show');
+            questionContainer.classList.add('answered');
+
+            // Update stats
+            stats.total++;
+            if (selectedOption === question.correct) {
+                stats.correct++;
+            }
+
+            updateStats();
+            updateProgress();
+            checkCompletion();
+        }
+
+        function updateStats() {
+            document.getElementById('correct-count').textContent = stats.correct;
+            document.getElementById('total-answered').textContent = stats.total;
+            const percentage = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+            document.getElementById('percentage').textContent = percentage + '%';
+        }
+
+        function updateProgress() {
+            const progress = (stats.total / currentQuestions.length) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        }
+
+        function checkCompletion() {
+            if (stats.total === currentQuestions.length) {
+                setTimeout(() => {
+                    showFinalScore();
+                }, 1000);
+            }
+        }
+
+        function showFinalScore() {
+            const percentage = Math.round((stats.correct / stats.total) * 100);
+            const finalScore = document.getElementById('final-score');
+            const finalPercentage = document.getElementById('final-percentage');
+            const finalMessage = document.getElementById('final-message');
+
+            finalPercentage.textContent = percentage + '%';
+            
+            if (percentage >= 90) {
+                finalMessage.textContent = '🎉 ¡Excelente! Estás muy bien preparado para el parcial.';
+                finalScore.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+            } else if (percentage >= 70) {
+                finalMessage.textContent = '👍 ¡Muy bien! Con un poco más de repaso estarás perfecto.';
+                finalScore.style.background = 'linear-gradient(135deg, #ffc107, #fd7e14)';
+            } else if (percentage >= 50) {
+                finalMessage.textContent = '📚 Buen intento. Te recomiendo repasar los temas que más te costaron.';
+                finalScore.style.background = 'linear-gradient(135deg, #fd7e14, #dc3545)';
+            } else {
+                finalMessage.textContent = '💪 Necesitas estudiar más. ¡No te desanimes, la práctica hace al maestro!';
+                finalScore.style.background = 'linear-gradient(135deg, #dc3545, #6f42c1)';
+            }
+
+            finalScore.classList.add('show');
+        }
+
+        function resetQuiz() {
+            stats = { correct: 0, total: 0 };
+            selectRandomQuestions();
+            renderQuestions();
+            updateStats();
+            updateProgress();
+            document.getElementById('final-score').classList.remove('show');
+            window.scrollTo(0, 0);
+        }
+
+        function showAllAnswers() {
+            currentQuestions.forEach((question, index) => {
+                const questionContainer = document.getElementById(`question-${index}`);
+                const options = questionContainer.querySelectorAll('.option');
+                const explanation = document.getElementById(`explanation-${index}`);
+
+                if (!questionContainer.classList.contains('answered')) {
+                    options.forEach(option => option.classList.add('disabled'));
+                    options[question.correct].classList.add('correct');
+                    explanation.classList.add('show');
+                    questionContainer.classList.add('answered');
+                }
+            });
+
+            // Update stats if not all were answered
+            if (stats.total < currentQuestions.length) {
+                stats.total = currentQuestions.length;
+                updateStats();
+                updateProgress();
+                setTimeout(() => {
+                    showFinalScore();
+                }, 1000);
+            }
+        }
+
+        // Initialize the quiz when page loads
+        window.onload = function() {
+            resetQuiz();
+        };
+    </script>
+</body>
+</html>
