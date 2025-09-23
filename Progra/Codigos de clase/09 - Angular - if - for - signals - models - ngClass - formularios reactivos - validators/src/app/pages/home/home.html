@@ -1,0 +1,121 @@
+
+<!-- Parte 1: Las dos formas de directivas estructurales para renderizar -->
+
+    <!-- 1. Con if / else if / else -->
+    <!-- @if (booleano) {
+        <p>Estoy dentro del if</p>
+    }
+    @else {
+        <p>Estoy dentro del else</p>
+    } -->
+
+    <!-- 2. Con for -->
+    <!-- @for (peli of arregloPelis; track peli.id) {
+
+        <h3> {{$index + 1}} - Nombre: {{peli.nombre}}</h3>
+    }  -->
+
+
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
+    <!-- Parte 2: Input y Output Signal -->
+
+    <!-- ---------------------- Input ---------------------- -->
+    <!-- <app-header [mensaje]="mensajeAEnviar"> </app-header> --> <!-- Invoco al header para que sea HIJO -->
+
+    <!-- ---------------------- Output ---------------------- -->
+    <!-- <app-header (enviarMensaje)="recibirMensaje($event)"></app-header>
+    <h2> El mensaje recibido es {{ mensajeRecibido }} </h2> -->
+
+
+
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
+    <!-- Parte 3: Models + Constructor -->
+    <!-- Para esta parte no debiamos hacer nada en el html :D -->
+
+
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
+
+    <!-- Parte 4: ngClass -->
+
+    <!-- <h1 [ngClass]="{oscuro: esOscuro, letraGrande: true}">¡Soy un texto con clases dinamicas!</h1>
+
+    <button (click)="cambiarModo()">Cambiar</button> -->
+
+
+
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
+
+    <!-- Parte 5 - Formularios Reactivos + Validators -->
+
+    <!-- 
+    <form [formGroup]="movieForm" (submit)="verSubmit()">
+
+        <fieldset>
+            <label for="movie-name">Nombre</label>
+            <input type="text" id="movie-name" formControlName="nameF">
+            @if(name.invalid && name.touched){
+                <p class="msj-error">El nombre es obligatorio</p>
+            }
+        </fieldset>
+
+        <fieldset>
+            <label for="movie-duration">Duracion</label>
+            <input type="text" id="movie-duration" formControlName="durationF">
+            @if(duration.hasError("required") && duration.touched){
+                <p class="msj-error">La duracion es obligatoria</p>
+            }@else if(duration.hasError("max") && duration.touched){
+                <p class="msj-error">La duracion no puede ser mayor a 300 minutos</p>
+            }
+        </fieldset>
+
+        <fieldset>
+            <label for="movie-director">Director</label>
+            <input type="text" id="movie-director" formControlName="directorF">
+        </fieldset>
+
+        <button [disabled]="movieForm.invalid">Create Movie</button>
+    </form> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+

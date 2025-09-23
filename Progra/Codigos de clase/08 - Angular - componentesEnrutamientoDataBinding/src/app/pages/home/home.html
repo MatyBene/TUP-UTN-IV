@@ -1,0 +1,39 @@
+
+
+<app-header></app-header>
+
+
+
+<!-- Las cuatro formas de Data Binding -->
+
+    <!-- 1. Traer de ts a texto html -->
+     <h1>Bienvenido {{nombreUsuario}}</h1>
+
+    <!-- 2. Traer de ts a atributo de html -->
+     <input type="text" [value]="nombreUsuario">
+
+    <!-- 3. Escuchar un evento en html y ejecutar algo de ts -->
+     <h3 (click)="sumarNumero()">Numero: {{numero}}</h3>
+
+    <!-- 4. Mandar ts a html y html a ts -->
+     <input type="text" [(ngModel)]="nombreUsuario">
+
+
+
+<!-- Las dos formas de directivas estructurales para renderizar -->
+
+    <!-- 1. Con if / else if / else -->
+    @if (booleano) {
+        <p>Estoy dentro del if</p>
+    }
+    @else {
+        <p>Estoy dentro del else</p>
+    }
+
+    <!-- 2. Con for -->
+    @for (peli of arregloPelis; track peli.id) {
+
+        <h3> {{$index + 1}} - Nombre: {{peli.nombre}}</h3>
+    }
+
+<app-footer></app-footer>
