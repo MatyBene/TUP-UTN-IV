@@ -1,0 +1,33 @@
+/* Contenedor general */
+h2, h3 {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 10px 0;
+}
+
+/* Título de la película */
+h2 {
+  color: #1a73e8;
+  font-size: 26px;
+}
+
+/* Director y duración */
+h3 {
+  color: #333;
+  font-size: 18px;
+}
+
+/* Mensaje cuando no hay película */
+h2:empty {
+  color: #e53935;
+  font-size: 20px;
+  margin-top: 50px;
+}
+
+
+.tarjeta{
+    border: 2px double black;
+    margin: 30px;
+    width: 300px;
+    margin: 30px auto;
+}

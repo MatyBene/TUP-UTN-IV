@@ -1,0 +1,17 @@
+@if(selectedMovie){
+    <div class="tarjeta">
+        <h2>
+            {{selectedMovie.name}}
+        </h2>
+        <h3>
+            {{selectedMovie.duration}}
+        </h3>
+        <h3>
+            {{selectedMovie.director}}
+        </h3>
+    </div>
+} @else {
+    <h2>
+        No existe una pelicula con ese nombre
+    </h2>
+}

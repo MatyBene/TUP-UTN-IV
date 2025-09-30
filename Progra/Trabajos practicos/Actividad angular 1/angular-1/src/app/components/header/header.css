@@ -1,0 +1,17 @@
+header{
+    background-color: black;
+}
+
+ul{
+    list-style: none;
+    margin: 0;
+    display: flex;
+    justify-content: flex-end;
+    line-height: 50px;
+}
+  
+a{
+    text-decoration: none;
+    color: white;
+    padding: 10px;
+}

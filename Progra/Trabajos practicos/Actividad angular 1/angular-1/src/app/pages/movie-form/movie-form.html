@@ -1,0 +1,18 @@
+<form [formGroup]="movieForm" (submit)="manejarEnvio()">
+    <fieldset>
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" formControlName="name">
+    </fieldset>
+
+    <fieldset>
+        <label for="duration">Duracion:</label>
+        <input type="number" id="duration" formControlName="duration">
+    </fieldset>
+
+    <fieldset>
+        <label for="director">Director:</label>
+        <input type="text" id="director" formControlName="director">
+    </fieldset>
+
+    <button>Enviar</button>
+</form>
