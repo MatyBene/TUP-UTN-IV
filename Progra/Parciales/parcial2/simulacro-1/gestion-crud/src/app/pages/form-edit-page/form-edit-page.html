@@ -1,0 +1,29 @@
+<form [formGroup]="productForm" (ngSubmit)="sendProduct()">
+    <fieldset>
+        <label for="product-name">Nombre</label>
+        <input type="text" id="product-name" formControlName="name">
+        @if (name.invalid && name.touched) {
+            <p class="error">El nombre es obligatorio</p>
+        }
+    </fieldset>
+
+    <fieldset>
+        <label for="product-price">Precio</label>
+        <input type="number" id="product-price" formControlName="price">
+        @if (price.invalid && price.touched) {
+            <p class="error">El precio es obligatorio</p>
+        }
+    </fieldset>
+
+    <fieldset>
+        <label for="product-stock">Stock</label>
+        <input type="number" id="product-stock" formControlName="stock">
+        @if (stock.hasError('required') && stock.touched) {
+            <p class="error">El stock es obligatorio</p>
+        } @else if(stock.hasError('min') && stock.touched) {
+            <p class="error">El stock debe ser mayor o igual a 10</p>
+        }
+    </fieldset>
+
+    <button [disabled]="productForm.invalid">Editar producto</button>
+</form>

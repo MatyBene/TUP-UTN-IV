@@ -1,0 +1,27 @@
+
+<h2>Editar Película</h2>
+
+<form [formGroup]="movieForm" (ngSubmit)="onSubmit()">
+  <fieldset>
+    <label>ID:</label>
+    <input formControlName="id" readonly>
+  </fieldset>
+
+  <fieldset>
+    <label>Nombre:</label>
+    <input formControlName="name">
+  </fieldset>
+
+  <fieldset>
+    <label>Duracion:</label>
+    <input formControlName="duration">
+  </fieldset>
+
+  <fieldset>
+    <label>Director:</label>
+    <input formControlName="director">
+  </fieldset>
+
+  <button type="submit">Guardar cambios</button>
+</form>
+

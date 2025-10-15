@@ -1,0 +1,28 @@
+{
+  "movies": [
+    {
+      "id": "e53c",
+      "name": "shrek",
+      "duration": 500,
+      "director": "Vicky Jenson"
+    },
+    {
+      "id": "6a1a",
+      "name": "The Matrix",
+      "duration": 136,
+      "director": "Lana Wachowski, Lilly Wachowski"
+    },
+    {
+      "id": "107b",
+      "name": "Interstellar",
+      "duration": 169,
+      "director": "Christopher Nolan"
+    },
+    {
+      "id": "2ed6",
+      "name": "The Godfather",
+      "duration": 175,
+      "director": "Francis Ford Coppola"
+    }
+  ]
+}

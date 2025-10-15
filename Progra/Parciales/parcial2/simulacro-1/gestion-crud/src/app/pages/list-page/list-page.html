@@ -1,0 +1,11 @@
+<ul>
+    @for (product of pService.products; track $index) {
+        <li>
+            <a [routerLink]="product.id">
+                <h3> {{product.name}} </h3>
+            </a>
+            <button (click)="removeProduct(product.id)">Eliminar</button>
+            <button (click)="editProduct(product)">Editar</button>
+        </li>
+    }
+</ul>

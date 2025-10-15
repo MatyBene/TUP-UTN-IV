@@ -1,0 +1,12 @@
+<ul>
+    @for (movie of mService.movies; track $index) {
+        <li>
+            <a [routerLink]="movie.id">
+                <h3> {{ movie.name }} </h3>
+                <h5> {{ movie.duration }} </h5>
+            </a>
+            <button (click)="deleteMovie(movie.id)">Eliminar</button>
+              <button (click)="editar(movie)">Editar</button>
+        </li>
+    }
+</ul>

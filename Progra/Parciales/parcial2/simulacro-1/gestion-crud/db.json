@@ -1,0 +1,22 @@
+{
+  "productos": [
+    {
+      "name": "Celular",
+      "price": 600,
+      "stock": 10,
+      "id": "e53c"
+    },
+    {
+      "id": "6a1a",
+      "name": "Notebook",
+      "price": 1500,
+      "stock": 5
+    },
+    {
+      "id": "107b",
+      "name": "Monitor",
+      "price": 1000,
+      "stock": 15
+    }
+  ]
+}

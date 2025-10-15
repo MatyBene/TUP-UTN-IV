@@ -1,0 +1,37 @@
+ul {
+  list-style: none;           /* saca los puntos */
+  padding: 0;
+  margin: 30px auto;
+  max-width: 600px;           /* ancho máximo */
+  display: grid;
+  grid-template-columns: 1fr; /* una sola columna (podés hacer varias si querés) */
+  gap: 15px;                  /* espacio entre items */
+  font-family: Arial, sans-serif;
+}
+
+li {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+li:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+  color: #007BFF;   /* azul para resaltar */
+}
+
+h5 {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+  font-weight: normal;
+}

@@ -1,0 +1,29 @@
+div {
+  max-width: 400px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #fefefe;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h3 {
+  color: #2c3e50;
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+h5 {
+  color: #7f8c8d;
+  font-size: 1.1em;
+  margin-top: 0;
+}
+
+h3.no-movie {
+  color: #e74c3c; /* Rojo para mensaje de alerta */
+  text-align: center;
+  margin-top: 50px;
+  font-size: 1.4em;
+}
