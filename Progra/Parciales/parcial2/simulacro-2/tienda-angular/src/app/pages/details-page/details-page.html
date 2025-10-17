@@ -1,1 +1,15 @@
-<p>details-page works!</p>
+@if(selectedProduct){
+    <div>
+        <h2>
+            {{selectedProduct.name}}
+        </h2>
+        <h3>
+            {{selectedProduct.price}}
+        </h3>
+        <h3>
+            {{selectedProduct.category}}
+        </h3>
+    </div>
+} @else {
+    <h2>No existe el producto</h2>
+}

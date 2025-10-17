@@ -3,20 +3,26 @@
     {
       "name": "Celular",
       "price": 600,
-      "stock": 10,
+      "category": "Tecnologia",
       "id": "e53c"
     },
     {
       "id": "6a1a",
       "name": "Notebook",
       "price": 1500,
-      "stock": 5
+      "category": "Tecnologia"
     },
     {
       "id": "107b",
-      "name": "Monitor",
+      "name": "Mesa",
       "price": 1000,
-      "stock": 15
+      "category": "Muebles"
+    },
+    {
+      "id": "7059",
+      "name": "Heladera",
+      "price": 4000,
+      "category": "Electrodomestico"
     }
   ]
 }

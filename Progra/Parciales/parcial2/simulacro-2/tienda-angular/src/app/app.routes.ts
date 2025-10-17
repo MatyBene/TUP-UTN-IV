@@ -10,5 +10,5 @@ export const routes: Routes = [
     {path: 'productos', component: ListPage},
     {path: 'productos/nuevo', component: FormPage},
     {path: 'productos/:id/editar', component: FormEditPage},
-    {path: 'prodcutos/:id', component: DetailsPage}
+    {path: 'productos/:id', component: DetailsPage}
 ];

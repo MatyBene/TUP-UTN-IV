@@ -1,0 +1,28 @@
+{
+  "clientes": [
+    {
+      "id": "1",
+      "nombre": "Ana Pérez",
+      "empresa": "TechNova",
+      "email": "ana.perez@technova.com",
+      "telefono": "1123456789",
+      "comentarios": "Cliente preferencial, seguimiento trimestral."
+    },
+    {
+      "id": "2",
+      "nombre": "Carlos Díaz",
+      "empresa": "Innova SA",
+      "email": "carlos.diaz@innova.com",
+      "telefono": "1145678901",
+      "comentarios": "Solicita presupuesto cada trimestre."
+    },
+    {
+      "id": "3",
+      "nombre": "Lucía Gómez",
+      "empresa": "DataCorp",
+      "email": "lucia.gomez@datacorp.com",
+      "telefono": "1133344455",
+      "comentarios": ""
+    }
+  ]
+}

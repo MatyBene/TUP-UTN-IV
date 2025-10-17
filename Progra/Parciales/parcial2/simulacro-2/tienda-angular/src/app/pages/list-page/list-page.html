@@ -1,1 +1,16 @@
-<p>list-page works!</p>
+<app-filter (searchChange)="onSearchChange($event)"></app-filter>
+
+<ul>
+    @for (product of filteredProducts; track $index) {
+        <li>
+            <a [routerLink]="product.id">
+                <h3> {{product.name}} </h3>
+            </a>
+            <button (click)="removeProduct(product.id)" >Eliminar</button>
+            <button (click)="editProduct(product)">Editar</button>
+        </li>
+    }
+    @empty {
+        <li>No se encontraron productos</li>
+    }
+</ul>

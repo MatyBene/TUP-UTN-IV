@@ -1,0 +1,12 @@
+app-header {
+  display: block;
+}
+
+app-footer {
+  display: block;
+  margin-top: auto;
+}
+
+router-outlet {
+  display: block;
+}

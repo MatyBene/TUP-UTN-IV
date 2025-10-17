@@ -1,1 +1,28 @@
-<p>form-edit-page works!</p>
+<form [formGroup]="productForm" (ngSubmit)="sendProduct()">
+    <fieldset>
+        <label for="name">Nombre</label>
+        <input type="text" id="name" formControlName="name">
+        @if (name.invalid && name.touched) {
+            <p>El nombre es obligatorio</p>
+        }
+    </fieldset>
+    <fieldset>
+        <label for="price">Precio</label>
+        <input type="number" id="price" formControlName="price">
+        @if (price.hasError('required') && price.touched) {
+            <p>El precio es obligatorio</p>
+        } @else if(price.hasError('min')){
+            <p>El precio no debe ser menor que 0</p>
+        } @else if(price.hasError('max')) {
+            <p>El precio no debe ser mayor que 500000</p>
+        }
+    </fieldset>
+    <fieldset>
+        <label for="category">Categoria</label>
+        <input type="text" id="category" formControlName="category">
+        @if(category.invalid && category.touched) {
+            <p>La categoria es obligatoria</p>
+        }
+    </fieldset>
+    <button [disabled]="productForm.invalid">Editar producto</button>
+</form>

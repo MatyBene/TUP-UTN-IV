@@ -1,0 +1,11 @@
+<div>
+    <input 
+    type="text" 
+    id="word" 
+    [(ngModel)]="searchTerm"
+    (keyup.enter)="onSearch()"
+    placeholder="Buscar por nombre...">
+    <button (click)="onSearch()">Buscar</button>
+    <button (click)="onClear()">Limpiar</button>
+</div>
+
