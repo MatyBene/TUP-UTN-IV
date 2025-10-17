@@ -1,0 +1,23 @@
+@if (selectedCliente) {
+    <div>
+        <h3>
+            {{selectedCliente.nombre}}
+        </h3>
+        <h4>
+            {{selectedCliente.empresa}}
+        </h4>
+        <h4>
+            {{selectedCliente.email}}
+        </h4>
+        <h4>
+            {{selectedCliente.telefono}}
+        </h4>
+        @if (selectedCliente.comentarios) {
+            <h4>
+            {{selectedCliente.comentarios}}
+        </h4>
+        }
+    </div>
+} @else {
+    <p>No existe el cliente</p>
+}

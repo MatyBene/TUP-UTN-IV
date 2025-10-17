@@ -1,0 +1,53 @@
+<form [formGroup]="clienteForm" (ngSubmit)="sendCliente()">
+
+    <fieldset>
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" formControlName="nombre">
+        @if (nombre.hasError('required') && nombre.touched) {
+            <p class="error">El nombre es obligatorio</p>
+        } @else if (nombre.hasError('minlength')) {
+            <p class="error">El nombre debe contener al menos 3 caracteres</p>
+        }
+    </fieldset>
+
+    <fieldset>
+        <label for="empresa">Empresa</label>
+        <input type="text" id="empresa" formControlName="empresa">
+        @if (empresa.invalid && empresa.touched) {
+            <p class="error">La empresa es obligatoria</p>
+        }
+    </fieldset>
+
+    <fieldset>
+        <label for="email">Email</label>
+        <input type="email" id="email" formControlName="email">
+        @if (email.hasError('required') && email.touched) {
+            <p class="error">El email es obligatorio</p>
+        } @else if (email.hasError('maxlength')) {
+            <p class="error">El email no debe tener mas de 300 caracteres</p>
+        } @else if(email.hasError('email')){
+            <p class="error">El email debe tener un formato valido</p>
+        }
+    </fieldset>
+
+    <fieldset>
+        <label for="telefono">Telefono</label>
+        <input type="text" id="telefono" formControlName="telefono">
+        @if (telefono.hasError('required') && telefono.touched) {
+            <p class="error">El telefono es obligatorio</p>
+        } @else if (telefono.hasError('pattern')) {
+            <p class="error">No puede contener letras</p>
+        } @else if (telefono.hasError('minlength')) {
+            <p class="error">Debe tener minimo 8 caracteres</p>
+        }
+    </fieldset>
+
+    <fieldset>
+        <label for="comentarios">Comentarios</label>
+        <input type="text" id="comentarios" formControlName="comentarios">
+        @if (comentarios.invalid && comentarios.touched) {
+            <p class="error">Los comentarios no deben exceder los 200 caracteres</p>
+        }
+    </fieldset>
+    <button [disabled]="clienteForm.invalid">Editar cliente</button>
+</form>

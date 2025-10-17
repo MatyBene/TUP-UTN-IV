@@ -1,0 +1,14 @@
+@if (cService.clientes) {
+    <ul>
+        @for (cliente of cService.clientes; track $index) {
+            <li>
+                Cliente: {{cliente.nombre}}
+                <button (click)="removeCliente(cliente.id)">Eliminar</button>
+                <button (click)="editCliente(cliente)">Editar</button>
+                <button (click)="showCliente(cliente.id)">Ver detalle</button>
+            </li>
+        }
+    </ul>
+} @else {
+    <p>No hay clientes en la base de datos</p>
+}
